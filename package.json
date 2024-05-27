@@ -43,6 +43,8 @@
     "babel-jest": "^29.7.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "mysql2": "^3.9.8",
+    "sequelize": "^6.37.3",
     "swagger-autogen": "^2.23.7",
     "swagger-ui": "^5.17.12",
     "swagger-ui-express": "^5.0.0"
