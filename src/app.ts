@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 // setup for swagger
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
+// teste
 app.use(routerTeste);
 
 app.get("/", (req: Request, res: Response) => {
