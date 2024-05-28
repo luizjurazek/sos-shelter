@@ -2,7 +2,7 @@ import { Model, Optional } from "sequelize";
 
 // Type for User Model
 interface UserAttributes {
-  id?: number;
+  id: number;
   name: string;
   lastname: string;
   birthday: Date;
