@@ -2,7 +2,6 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerFile from "../swagger_output.json";
 import userRouter from "./routes/userRouter";
-import { sequelize } from "./config/connection";
 
 const app = express();
 

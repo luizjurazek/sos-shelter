@@ -2,21 +2,61 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
+    "title": "S.O.S Shelter",
     "description": ""
   },
-  "host": "localhost:3000",
-  "basePath": "/",
-  "schemes": [
-    "http"
+  "host": "",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "",
+      "description": ""
+    }
   ],
+  "schemes": [],
+  "securityDefinitions": {},
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
+    "/create": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to create a user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "lastname": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "phonenumber": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "201": {
+            "description": "Created"
           }
         }
       }
