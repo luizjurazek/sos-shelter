@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { sequelize } from "../config/connection";
 import User from "../model/userModel";
 
-const UserModel = User(sequelize);
+const UserModel = User;
 
 class UserController {
   // method to create a new user

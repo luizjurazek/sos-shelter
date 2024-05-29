@@ -1,49 +1,49 @@
 import { DataTypes, Sequelize } from "sequelize";
-import { UserModel } from "../types/userTypes";
+import { sequelize } from "../config/connection";
 
-export default (sequelize: Sequelize) => {
-  UserModel.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      lastname: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      birthday: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      phonenumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      role: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+const UserModel = sequelize.define(
+  "User",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
     },
-    {
-      sequelize,
-      modelName: "User",
-      tableName: "users",
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-  );
-  return UserModel;
-};
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    birthday: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phonenumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    timestamps: true,
+    modelName: "User",
+    tableName: "users",
+  },
+);
+
+export default UserModel;
