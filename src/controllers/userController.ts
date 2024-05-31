@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { sequelize } from "../config/connection";
 import User from "../models/userModel";
 
 const UserModel = User;
@@ -12,13 +11,22 @@ class UserController {
     try {
       const allUsers = await UserModel.findAll();
 
-      const response = {
-        error: false,
-        message: "Users founds successfully",
-        users: allUsers,
-      };
+      if (allUsers.length === 0) {
+        const response = {
+          error: true,
+          message: "Users not found",
+        };
 
-      return res.status(200).json(response);
+        return res.status(404).json(response);
+      } else {
+        const response = {
+          error: false,
+          message: "Users founds successfully",
+          users: allUsers,
+        };
+
+        return res.status(200).json(response);
+      }
     } catch (error) {
       next(error);
     }
@@ -53,13 +61,22 @@ class UserController {
         });
       }
 
-      const response = {
-        error: false,
-        message: "User found successfully",
-        user,
-      };
+      if (user === null) {
+        const response = {
+          error: true,
+          message: "User not found",
+        };
 
-      return res.status(200).json(response);
+        return res.status(404).json(response);
+      } else {
+        const response = {
+          error: false,
+          message: "User found successfully",
+          user,
+        };
+
+        return res.status(200).json(response);
+      }
     } catch (error) {
       next(error);
     }
@@ -70,7 +87,9 @@ class UserController {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint to create a user'
     try {
-      const { name, lastname, birthday, email, phonenumber, password, role } = req.body;
+      const { name, lastname, birthday, email, phonenumber, password, role }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; password: string; role: string } =
+        req.body;
+
       const newUser = await UserModel.create({
         name,
         lastname,
@@ -81,13 +100,98 @@ class UserController {
         role,
       });
 
-      const response = {
-        error: false,
-        message: "User created successfully.",
-        user: newUser,
-      };
+      if (newUser === null) {
+        const response = {
+          error: true,
+          message: "Has a erro while creating a user",
+        };
 
-      return res.status(201).json(response);
+        return res.status(400).json(response);
+      } else {
+        const response = {
+          error: false,
+          message: "User created successfully",
+          user: newUser,
+        };
+
+        return res.status(201).json(response);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // method to edit a new user
+  async editUser(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to edit a user'
+    try {
+      const { id, name, lastname, birthday, email, phonenumber, password, role } = req.body;
+
+      const user = await UserModel.findOne({ where: { id } });
+
+      if (user != null) {
+        await UserModel.update(
+          { name, lastname, birthday, email, phonenumber, password, role },
+          {
+            where: { id },
+            returning: true,
+          },
+        );
+
+        const response = {
+          error: false,
+          message: "User edited with successfully",
+          old_data_user: user.dataValues,
+          new_data_user: {
+            name,
+            lastname,
+            birthday,
+            email,
+            phonenumber,
+            password,
+            role,
+          },
+        };
+
+        return res.status(200).json(response);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Method to delete a user
+  async deleteUser(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint to delete a user'
+    try {
+      const id = req.params.id;
+
+      const deletedUser = await UserModel.destroy({
+        where: {
+          id,
+        },
+      });
+
+      console.log(deletedUser);
+      if (deletedUser === 0) {
+        const response = {
+          error: true,
+          message: "Has a error while deleting a user",
+          id,
+        };
+
+        res.status(400).json(response);
+      } else {
+        const response = {
+          error: false,
+          message: "User deleted with successfully",
+          id,
+        };
+
+        res.status(200).json(response);
+      }
     } catch (error) {
       next(error);
     }
