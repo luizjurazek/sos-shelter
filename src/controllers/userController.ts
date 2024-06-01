@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
+import bcrypt from "bcrypt";
 
 const UserModel = User;
 
@@ -87,8 +88,9 @@ class UserController {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint to create a user'
     try {
-      const { name, lastname, birthday, email, phonenumber, password, role }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; password: string; role: string } =
-        req.body;
+      const { name, lastname, birthday, email, phonenumber, role }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: string } = req.body;
+      const salt = bcrypt.genSaltSync(10);
+      const password = await bcrypt.hash(req.body.password, salt);
 
       const newUser = await UserModel.create({
         name,
@@ -126,7 +128,16 @@ class UserController {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint to edit a user'
     try {
-      const { id, name, lastname, birthday, email, phonenumber, password, role } = req.body;
+      const {
+        id,
+        name,
+        lastname,
+        birthday,
+        email,
+        phonenumber,
+        password,
+        role,
+      }: { id: number; name: string; lastname: string; birthday: Date; email: string; phonenumber: string; password: string; role: string } = req.body;
 
       const user = await UserModel.findOne({ where: { id } });
 
