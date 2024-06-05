@@ -7,8 +7,10 @@ CREATE TABLE users (
     phonenumber VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,
+    id_shelter INT,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_shelter_id FOREIGN KEY (id_shelter) REFERENCES shelters(id)
 );
 
 CREATE TABLE shelters (
@@ -47,4 +49,45 @@ CREATE TABLE peoples (
     updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_shelter_people FOREIGN KEY (id_shelter) REFERENCES shelters(id)
 );
+
+CREATE TABLE BlacklistTokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+);
+
+
+DELIMITER //
+
+CREATE TRIGGER trigger_update_amount_volunteers
+AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+    -- Atualizar o amount_volunteers na tabela shelters após a inserção de um usuário
+    UPDATE shelters 
+    SET amount_volunteers = (
+        SELECT COUNT(*) 
+        FROM users 
+        WHERE users.id_shelter = shelters.id
+    )
+    WHERE shelters.id = NEW.id_shelter;
+END//
+
+
+CREATE TRIGGER trigger_update_amount_volunteers_delete
+AFTER DELETE ON users
+FOR EACH ROW
+BEGIN
+    -- Atualizar o amount_volunteers na tabela shelters após a remoção de um usuário
+    UPDATE shelters 
+    SET amount_volunteers = (
+        SELECT COUNT(*) 
+        FROM users 
+        WHERE users.id_shelter = shelters.id
+    )
+    WHERE shelters.id = OLD.id_shelter;
+END//
+
+DELIMITER ;
 

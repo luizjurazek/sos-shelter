@@ -88,7 +88,15 @@ class UserController {
     // #swagger.tags = ['User']
     // #swagger.description = 'Endpoint to create a user'
     try {
-      const { name, lastname, birthday, email, phonenumber, role }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: string } = req.body;
+      const {
+        name,
+        lastname,
+        birthday,
+        email,
+        phonenumber,
+        role,
+        id_shelter,
+      }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: string; id_shelter: number } = req.body;
       const salt = bcrypt.genSaltSync(10);
       const password = await bcrypt.hash(req.body.password, salt);
 
@@ -100,6 +108,7 @@ class UserController {
         phonenumber,
         password,
         role,
+        id_shelter,
       });
 
       if (newUser === null) {

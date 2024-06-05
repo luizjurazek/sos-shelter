@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../config/connection";
+import ShelterModel from "./shelterModel";
 
 const UserModel = sequelize.define(
   "User",
@@ -37,6 +38,13 @@ const UserModel = sequelize.define(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    id_shelter: {
+      type: DataTypes.NUMBER,
+      references: {
+        model: "Shelter",
+        key: "id",
+      },
     },
   },
   {
