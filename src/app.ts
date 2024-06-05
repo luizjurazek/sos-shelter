@@ -2,6 +2,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerFile from "../swagger_output.json";
 import userRouter from "./routes/userRouter";
+import loginRouter from "./routes/loginRouter";
 
 const app = express();
 
@@ -11,5 +12,6 @@ app.use(express.json());
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/user", userRouter);
+app.use("/user", loginRouter);
 
 export default app;

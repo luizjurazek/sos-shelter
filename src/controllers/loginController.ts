@@ -3,10 +3,12 @@ import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
+import BlacklistToken from "./blacklistTokenController";
 dotenvConfig();
 
 const SECRET_JWT: jwt.Secret = process.env.SECRET_JWT || "Default_secret";
 const UserModel = User;
+const BlacklistTokenController = new BlacklistToken();
 
 class LoginController {
   // method to do login
@@ -54,7 +56,7 @@ class LoginController {
         },
       );
 
-      const response = {
+      const response: object = {
         error: false,
         message: "Login successfully",
         email: user.dataValues.email,
@@ -63,6 +65,37 @@ class LoginController {
       };
 
       return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token: string | undefined = req.headers["authorization"];
+
+      if (!token) {
+        const response = { error: true, message: "Authorization header missing" };
+        return res.status(400).json(response);
+      }
+
+      const insertedTokenOnBlacklist: boolean = await BlacklistTokenController.insertToken(token);
+
+      if (!insertedTokenOnBlacklist) {
+        const response: object = {
+          error: true,
+          message: "There was an error while logging out",
+        };
+
+        return res.status(500).json(response);
+      } else {
+        const response: object = {
+          error: true,
+          message: "Logging out with successfully",
+        };
+
+        return res.status(200).json(response);
+      }
     } catch (error) {
       next(error);
     }

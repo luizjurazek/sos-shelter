@@ -6,6 +6,7 @@ const router: Router = Router();
 const LoginController = new Controller();
 
 router.get("/login", LoginController.login);
+router.get("/logout", LoginController.logout);
 router.use(errorHandle);
 
 export default router;
