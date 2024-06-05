@@ -1,16 +1,16 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
-import { Request, Response, NextFunction } from "express";
-
+import { Request, Response, NextFunction, response } from "express";
+import BlacklistToken from "../controllers/blacklistTokenController";
 dotenvConfig();
 
 const SECRET_JWT: jwt.Secret = process.env.SECRET_JWT || "Default secret";
-
+const BlacklistTokenController = new BlacklistToken();
 interface CustomRequest extends Request {
   userId?: string; // Assuming userId is of type string
 }
 
-function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction) {
+async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction) {
   const TOKEN = req.headers["authorization"];
   if (!TOKEN || typeof TOKEN !== "string") {
     const response = {
@@ -19,6 +19,16 @@ function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction) {
       message: "No token provided",
     };
     return res.status(401).json(response);
+  }
+
+  const isAlreadyTokenOnBlackList: boolean = await BlacklistTokenController.verifyTokenOnBlackList(TOKEN);
+
+  if (isAlreadyTokenOnBlackList) {
+    const response = {
+      error: true,
+      message: "Unauthorized user, do login again",
+    };
+    return res.status(500).json(response);
   }
 
   jwt.verify(TOKEN, SECRET_JWT, function (error, decoded) {
