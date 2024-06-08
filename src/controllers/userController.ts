@@ -13,14 +13,14 @@ class UserController {
       const allUsers = await UserModel.findAll();
 
       if (allUsers.length === 0) {
-        const response = {
+        const response: object = {
           error: true,
           message: "Users not found",
         };
 
         return res.status(404).json(response);
       } else {
-        const response = {
+        const response: object = {
           error: false,
           message: "Users founds successfully",
           users: allUsers,
@@ -63,14 +63,14 @@ class UserController {
       }
 
       if (user === null) {
-        const response = {
+        const response: object = {
           error: true,
           message: "User not found",
         };
 
         return res.status(404).json(response);
       } else {
-        const response = {
+        const response: object = {
           error: false,
           message: "User found successfully",
           user,
@@ -112,14 +112,14 @@ class UserController {
       });
 
       if (newUser === null) {
-        const response = {
+        const response: object = {
           error: true,
           message: "Has a erro while creating a user",
         };
 
         return res.status(400).json(response);
       } else {
-        const response = {
+        const response: object = {
           error: false,
           message: "User created successfully",
           user: newUser,
@@ -159,7 +159,7 @@ class UserController {
           },
         );
 
-        const response = {
+        const response: object = {
           error: false,
           message: "User edited with successfully",
           old_data_user: user.dataValues,
@@ -196,7 +196,7 @@ class UserController {
 
       console.log(deletedUser);
       if (deletedUser === 0) {
-        const response = {
+        const response: object = {
           error: true,
           message: "Has a error while deleting a user",
           id,
@@ -204,7 +204,7 @@ class UserController {
 
         res.status(400).json(response);
       } else {
-        const response = {
+        const response: object = {
           error: false,
           message: "User deleted with successfully",
           id,
