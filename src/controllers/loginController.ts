@@ -70,7 +70,10 @@ class LoginController {
     }
   }
 
+  // method to do logout
   async logout(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Login']
+    // #swagger.description = 'Endpoint to do logout'
     try {
       const token: string | undefined = req.headers["authorization"];
 

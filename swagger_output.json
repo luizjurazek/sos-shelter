@@ -5,18 +5,188 @@
     "title": "S.O.S Shelter",
     "description": ""
   },
-  "host": "",
-  "basePath": "",
+  "host": "localhost:3000",
+  "basePath": "/",
   "tags": [
     {
       "name": "",
       "description": ""
     }
   ],
-  "schemes": [],
+  "schemes": [
+    "http"
+  ],
   "securityDefinitions": {},
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
-    "/create": {
+    "/login": {
+      "get": {
+        "tags": [
+          "Login"
+        ],
+        "description": "Endpoint to do login",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": [
+          "Login"
+        ],
+        "description": "Endpoint to do logout",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/get-shelters": {
+      "get": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to get all Shelters",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/get-shelters-by-city/{city}": {
+      "get": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to get all shelters by city",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/create-shelter": {
+      "post": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to create a shelter",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "max_capacity": {
+                  "example": "any"
+                },
+                "current_occupancy": {
+                  "example": "any"
+                },
+                "amount_volunteers": {
+                  "example": "any"
+                },
+                "id_admin_shelter": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/get-users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get all users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/get-user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to get a users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/create-user": {
       "post": {
         "tags": [
           "User"
@@ -29,6 +199,60 @@
             "schema": {
               "type": "object",
               "properties": {
+                "password": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "lastname": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "phonenumber": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                },
+                "id_shelter": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/edit-user": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to edit a user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                },
                 "name": {
                   "example": "any"
                 },
@@ -55,8 +279,32 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/delete-user/{id}": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }

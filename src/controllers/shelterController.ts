@@ -69,7 +69,10 @@ class ShelterController {
     }
   }
 
+  // method to create a shelter
   async createShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to create a shelter'
     try {
       const { name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter } = req.body;
 
