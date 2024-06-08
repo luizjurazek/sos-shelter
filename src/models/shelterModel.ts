@@ -15,16 +15,20 @@ const ShelterModel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    adress: {
+    address: {
       type: DataTypes.JSON,
       allowNull: false,
+      get() {
+        const rawValue = this.getDataValue("address");
+        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      },
     },
     max_capacity: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
     },
-    current_ocuppancy: {
+    current_occupancy: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
