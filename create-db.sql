@@ -38,7 +38,7 @@ CREATE TABLE supplies (
 CREATE TABLE peoples (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    age INT NOT NULL,
+    birthday DATE NOT NULL,
     contact VARCHAR(255),
     old_adress JSON DEFAULT NULL,
     new_adress JSON DEFAULT NULL,

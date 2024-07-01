@@ -15,8 +15,8 @@ const PeopleModel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age: {
-      type: DataTypes.INTEGER,
+    birthday: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     contact: {

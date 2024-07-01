@@ -1,7 +1,7 @@
 interface ShelterAttributes {
   id: number;
   name: string;
-  adress: JSON;
+  address: JSON;
   max_capacity: number;
   current_ocuppancy: number;
   amount_volunteers: number;

@@ -1,6 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../config/connection";
-import ShelterModel from "./shelterModel";
 
 const UserModel = sequelize.define(
   "User",
