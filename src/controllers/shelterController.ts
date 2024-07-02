@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import Shelter from "../models/shelterModel";
 import { Op, literal } from "sequelize";
+import PeopleModel from "../models/peopleModel";
+import { error } from "console";
 
 const ShelterModel = Shelter;
 
@@ -74,7 +76,14 @@ class ShelterController {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to create a shelter'
     try {
-      const { name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter } = req.body;
+      const {
+        name,
+        address,
+        max_capacity,
+        current_occupancy,
+        amount_volunteers,
+        id_admin_shelter,
+      }: { name: string; address: string; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
 
       const shelterCreated = await ShelterModel.create({
         name,
@@ -104,6 +113,54 @@ class ShelterController {
     } catch (error) {
       next(error);
     }
+  }
+
+  // method to delete a shelter
+  async deleteShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to delete a shelter'
+    const id: number = req.body.id;
+
+    const peoplesInShelter = await PeopleModel.findAll({
+      where: {
+        id_shelter: id,
+      },
+    });
+
+    if (peoplesInShelter.length !== 0) {
+      const response: object = {
+        error: true,
+        message: "Has one or more people on Shelter that you want to delete",
+      };
+
+      return res.status(400).json(response);
+    }
+
+    const shelter = await ShelterModel.findByPk(id);
+    const shelterData = shelter?.dataValues;
+
+    const deletedShelter = await ShelterModel.destroy({
+      where: {
+        id,
+      },
+    });
+
+    if (deletedShelter !== 1) {
+      const response: object = {
+        error: true,
+        message: "Has an error while deleting the shelter",
+        shelter: shelterData,
+      };
+      return res.status(400).json(response);
+    }
+
+    const response: object = {
+      error: false,
+      massage: "Shelter deleted with successfully",
+      shelter: shelterData,
+    };
+
+    return res.status(200).json(response);
   }
 }
 

@@ -21,13 +21,13 @@ app.use("/user", userRouter);
 app.use("/shelter", shelterRouter);
 
 // Sync datase when start application
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log("Database synced");
-  })
-  .catch((error) => {
-    console.log("Has an erro while sync database: ", error);
-  });
+// sequelize
+//   .sync({ force: false })
+//   .then(() => {
+//     console.log("Database synced");
+//   })
+//   .catch((error) => {
+//     console.log("Has an erro while sync database: ", error);
+//   });
 
 export default app;
