@@ -1,12 +1,66 @@
 import { Request, Response, NextFunction } from "express";
 import Shelter from "../models/shelterModel";
-import { Op, literal, where } from "sequelize";
+import { Op, literal } from "sequelize";
 import PeopleModel from "../models/peopleModel";
-import { error } from "console";
+import { shelterValidatorData } from "../utils/shelterValidatorData";
+import { CustomError } from "../types/errorTypes";
 
 const ShelterModel = Shelter;
 
 class ShelterController {
+  // method to create a shelter
+  async createShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to create a shelter'
+    try {
+      // Case data isnt validated throw an error
+      const validateData = await shelterValidatorData(req.body);
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has errors on data ");
+        error.statusCode = 400;
+        error.errors = validateData;
+        throw error;
+      }
+
+      const {
+        name,
+        address,
+        max_capacity,
+        current_occupancy,
+        amount_volunteers,
+        id_admin_shelter,
+      }: { name: string; address: string; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
+
+      const shelterCreated = await ShelterModel.create({
+        name,
+        address,
+        max_capacity,
+        current_occupancy,
+        amount_volunteers,
+        id_admin_shelter,
+      });
+
+      if (shelterCreated === null) {
+        const response: object = {
+          error: true,
+          message: "Has a erro while creating a shelter",
+        };
+
+        return res.status(400).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Shelter created with successfully",
+        shelterCreated,
+      };
+
+      return res.status(201).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // method to get all shelters
   async getShelters(req: Request, res: Response, next: NextFunction) {
     // #swagger.tags = ['Shelter']
@@ -71,55 +125,10 @@ class ShelterController {
     }
   }
 
-  // method to create a shelter
-  async createShelter(req: Request, res: Response, next: NextFunction) {
-    // #swagger.tags = ['Shelter']
-    // #swagger.description = 'Endpoint to create a shelter'
-    try {
-      const {
-        name,
-        address,
-        max_capacity,
-        current_occupancy,
-        amount_volunteers,
-        id_admin_shelter,
-      }: { name: string; address: string; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
-
-      const shelterCreated = await ShelterModel.create({
-        name,
-        address,
-        max_capacity,
-        current_occupancy,
-        amount_volunteers,
-        id_admin_shelter,
-      });
-
-      if (shelterCreated === null) {
-        const response: object = {
-          error: true,
-          message: "Has a erro while creating a shelter",
-        };
-
-        return res.status(400).json(response);
-      }
-
-      const response: object = {
-        error: false,
-        message: "Shelter created with successfully",
-        shelterCreated,
-      };
-
-      return res.status(201).json(response);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   // method to delete a shelter
   async deleteShelter(req: Request, res: Response, next: NextFunction) {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to delete a shelter'
-
     try {
       const id: number = req.body.id;
 
