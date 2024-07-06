@@ -33,6 +33,7 @@ class LoginController {
         return res.status(404).json(response);
       }
 
+      // Compare password in bd with password inserted
       if (!(await bcrypt.compare(password, user.dataValues.password))) {
         const response: object = {
           error: true,

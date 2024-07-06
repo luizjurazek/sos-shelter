@@ -146,7 +146,16 @@ class UserController {
         phonenumber,
         password,
         role,
-      }: { id: number; name: string; lastname: string; birthday: Date; email: string; phonenumber: string; password: string; role: string } = req.body;
+      }: {
+        id: number;
+        name: string;
+        lastname: string;
+        birthday: Date;
+        email: string;
+        phonenumber: string;
+        password: string;
+        role: string;
+      } = req.body;
 
       const user = await UserModel.findOne({ where: { id } });
 
