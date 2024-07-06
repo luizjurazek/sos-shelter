@@ -16,6 +16,10 @@ function errorHandle(error: CustomError, req: Request, res: Response, next: Next
     message: message,
   };
 
+  if (error.errors) {
+    errorDetails.errors = error.errors;
+  }
+
   if (process.env.NODE_ENV === "development") {
     errorDetails.stack = error.stack;
   }

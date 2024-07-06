@@ -1,9 +1,9 @@
 interface ShelterAttributes {
-  id: number;
+  id?: number;
   name: string;
   address: JSON;
   max_capacity: number;
-  current_ocuppancy: number;
+  current_occupancy: number;
   amount_volunteers: number;
   id_admin_shelter: number;
 }
