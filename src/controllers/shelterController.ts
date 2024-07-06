@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Shelter from "../models/shelterModel";
-import { Op, literal } from "sequelize";
+import { Op, literal, where } from "sequelize";
 import PeopleModel from "../models/peopleModel";
 import { error } from "console";
 
@@ -119,45 +119,111 @@ class ShelterController {
   async deleteShelter(req: Request, res: Response, next: NextFunction) {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to delete a shelter'
-    const id: number = req.body.id;
 
-    const peoplesInShelter = await PeopleModel.findAll({
-      where: {
-        id_shelter: id,
-      },
-    });
+    try {
+      const id: number = req.body.id;
 
-    if (peoplesInShelter.length !== 0) {
+      const peoplesInShelter = await PeopleModel.findAll({
+        where: {
+          id_shelter: id,
+        },
+      });
+
+      if (peoplesInShelter.length !== 0) {
+        const response: object = {
+          error: true,
+          message: "Has one or more people on Shelter that you want to delete",
+        };
+
+        return res.status(400).json(response);
+      }
+
+      const shelter = await ShelterModel.findByPk(id);
+      const shelterData = shelter?.dataValues;
+
+      const deletedShelter = await ShelterModel.destroy({
+        where: {
+          id,
+        },
+      });
+
+      if (deletedShelter !== 1) {
+        const response: object = {
+          error: true,
+          message: "Has an error while deleting the shelter",
+          shelter: shelterData,
+        };
+        return res.status(400).json(response);
+      }
+
       const response: object = {
-        error: true,
-        message: "Has one or more people on Shelter that you want to delete",
-      };
-
-      return res.status(400).json(response);
-    }
-
-    const shelter = await ShelterModel.findByPk(id);
-    const shelterData = shelter?.dataValues;
-
-    const deletedShelter = await ShelterModel.destroy({
-      where: {
-        id,
-      },
-    });
-
-    if (deletedShelter !== 1) {
-      const response: object = {
-        error: true,
-        message: "Has an error while deleting the shelter",
+        error: false,
+        massage: "Shelter deleted with successfully",
         shelter: shelterData,
       };
+
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Method to edit a shelter
+  async editShelter(req: Request, res: Response, next: NextFunction) {
+    const {
+      id,
+      name,
+      address,
+      max_capacity,
+      current_occupancy,
+      amount_volunteers,
+      id_admin_shelter,
+    }: {
+      id: number;
+      name: string;
+      address: JSON;
+      max_capacity: number;
+      current_occupancy: number;
+      amount_volunteers: number;
+      id_admin_shelter: number;
+    } = req.body;
+
+    const shelter = await ShelterModel.findByPk(id);
+
+    // case shelter is not found in bd return and error
+    if (shelter === null) {
+      const response: object = {
+        error: true,
+        message: "Shelter not found",
+        id,
+      };
+
+      return res.status(404).json(response);
+    }
+
+    const shelterUpdate = await ShelterModel.update({ name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter }, { where: { id }, returning: false });
+
+    if (shelterUpdate[0] !== 1) {
+      const response: object = {
+        error: true,
+        message: "Has an error while update the shelter, try again",
+      };
+
       return res.status(400).json(response);
     }
 
     const response: object = {
       error: false,
-      massage: "Shelter deleted with successfully",
-      shelter: shelterData,
+      message: "Shelter updated with succesfully",
+      old_data_shelter: shelter.dataValues,
+      new_data_shelter: {
+        name,
+        address,
+        max_capacity,
+        current_occupancy,
+        amount_volunteers,
+        id_admin_shelter,
+      },
     };
 
     return res.status(200).json(response);

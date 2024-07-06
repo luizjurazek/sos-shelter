@@ -3,12 +3,13 @@ import errorHandle from "../middlewares/errorHandle";
 import controller from "../controllers/shelterController";
 
 const router: Router = Router();
-const ShelterControle = new controller();
+const ShelterController = new controller();
 
-router.get("/get-shelters", ShelterControle.getShelters);
-router.get("/get-shelters-by-city/:city", ShelterControle.getSheltersByCity);
-router.post("/create-shelter", ShelterControle.createShelter);
-router.get("/delete-shelter", ShelterControle.deleteShelter);
+router.get("/get-shelters", ShelterController.getShelters);
+router.get("/get-shelters-by-city/:city", ShelterController.getSheltersByCity);
+router.post("/create-shelter", ShelterController.createShelter);
+router.patch("/edit-shelter", ShelterController.editShelter);
+router.delete("/delete-shelter", ShelterController.deleteShelter);
 
 router.use(errorHandle);
 
