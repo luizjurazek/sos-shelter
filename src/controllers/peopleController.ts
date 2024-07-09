@@ -2,6 +2,7 @@ import People from "../models/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
 import peopleValidatorData from "../utils/peopleValidatorData";
+import statusCode from "../utils/statusCode";
 
 const PeopleModel = People;
 
@@ -19,7 +20,7 @@ class PeopleController {
           message: "People not found",
         };
 
-        return res.status(404).json(response);
+        return res.status(statusCode.NOT_FOUND).json(response);
       }
 
       const response: object = {
@@ -28,7 +29,7 @@ class PeopleController {
         people,
       };
 
-      return res.status(200).json(response);
+      return res.status(statusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
@@ -36,6 +37,8 @@ class PeopleController {
 
   // enpoint to create a person
   async createPerson(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['People']
+    // #swagger.description = 'Endpoint to create a people'
     try {
       const validateData: Array<string> | boolean = await peopleValidatorData(req.body);
 
@@ -65,7 +68,7 @@ class PeopleController {
           message: "Has a erro while creating a person",
         };
 
-        return res.status(400).json(response);
+        return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
       const response: object = {
@@ -74,7 +77,37 @@ class PeopleController {
         person,
       };
 
-      return res.status(201).json(response);
+      return res.status(statusCode.CREATED).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Endpoint to get a person by id
+  async getPersonById(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['People']
+    // #swagger.description = 'Endpoint to get a person by id'
+    try {
+      const id: number = parseInt(req.params.id);
+      const person: People | null = await PeopleModel.findByPk(id);
+      console.log(person);
+      if (person === null) {
+        const response: object = {
+          error: true,
+          message: "Person not found",
+          id,
+        };
+
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Person found with succesfully",
+        person,
+      };
+
+      return res.status(statusCode.OK).json(response);
     } catch (error) {
       next(error);
     }

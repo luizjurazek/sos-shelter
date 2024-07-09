@@ -36,10 +36,18 @@ People.init(
     old_address: {
       type: DataTypes.JSON,
       defaultValue: null,
+      get() {
+        const rawValue = this.getDataValue("old_address");
+        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      },
     },
     new_address: {
       type: DataTypes.JSON,
       defaultValue: null,
+      get() {
+        const rawValue = this.getDataValue("new_address");
+        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      },
     },
     cpf: {
       type: DataTypes.STRING,
