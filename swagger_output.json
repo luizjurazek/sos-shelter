@@ -69,12 +69,12 @@
         }
       }
     },
-    "/get-shelters": {
+    "/get-all-people": {
       "get": {
         "tags": [
-          "Shelter"
+          "People"
         ],
-        "description": "Endpoint to get all Shelters",
+        "description": "Endpoint to get all people",
         "responses": {
           "200": {
             "description": "OK"
@@ -85,26 +85,50 @@
         }
       }
     },
-    "/get-shelters-by-city/{city}": {
-      "get": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to get all shelters by city",
+    "/create-person": {
+      "post": {
+        "description": "",
         "parameters": [
           {
-            "name": "city",
-            "in": "path",
-            "required": true,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "contact": {
+                  "example": "any"
+                },
+                "old_address": {
+                  "example": "any"
+                },
+                "new_address": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "id_shelter": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
-          "404": {
-            "description": "Not Found"
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -147,6 +171,127 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/get-shelters": {
+      "get": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to get all Shelters",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/get-shelters-by-city/{city}": {
+      "get": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to get all shelters by city",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/edit-shelter": {
+      "put": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to edit a shelter",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "max_capacity": {
+                  "example": "any"
+                },
+                "current_occupancy": {
+                  "example": "any"
+                },
+                "amount_volunteers": {
+                  "example": "any"
+                },
+                "id_admin_shelter": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/delete-shelter": {
+      "delete": {
+        "tags": [
+          "Shelter"
+        ],
+        "description": "Endpoint to delete a shelter",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
