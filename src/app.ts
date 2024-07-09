@@ -7,6 +7,7 @@ import userRouter from "./routes/userRouter";
 import loginRouter from "./routes/loginRouter";
 import shelterRouter from "./routes/shelterRouter";
 import peopleRouter from "./routes/peopleRouter";
+import mainRouter from "./routes/mainRouter";
 
 const app = express();
 
@@ -15,10 +16,7 @@ app.use(express.json());
 // setup for swagger
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.use(loginRouter);
-app.use("/user", userRouter);
-app.use("/shelter", shelterRouter);
-app.use("/people", peopleRouter);
+app.use(mainRouter);
 
 // Sync datase when start application
 // sequelize

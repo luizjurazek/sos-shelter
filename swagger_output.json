@@ -69,237 +69,7 @@
         }
       }
     },
-    "/get-all-people": {
-      "get": {
-        "tags": [
-          "People"
-        ],
-        "description": "Endpoint to get all people",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/create-person": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "birthday": {
-                  "example": "any"
-                },
-                "contact": {
-                  "example": "any"
-                },
-                "old_address": {
-                  "example": "any"
-                },
-                "new_address": {
-                  "example": "any"
-                },
-                "cpf": {
-                  "example": "any"
-                },
-                "status": {
-                  "example": "any"
-                },
-                "id_shelter": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/create-shelter": {
-      "post": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to create a shelter",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "max_capacity": {
-                  "example": "any"
-                },
-                "current_occupancy": {
-                  "example": "any"
-                },
-                "amount_volunteers": {
-                  "example": "any"
-                },
-                "id_admin_shelter": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/get-shelters": {
-      "get": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to get all Shelters",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/get-shelters-by-city/{city}": {
-      "get": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to get all shelters by city",
-        "parameters": [
-          {
-            "name": "city",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/edit-shelter": {
-      "put": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to edit a shelter",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "address": {
-                  "example": "any"
-                },
-                "max_capacity": {
-                  "example": "any"
-                },
-                "current_occupancy": {
-                  "example": "any"
-                },
-                "amount_volunteers": {
-                  "example": "any"
-                },
-                "id_admin_shelter": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/delete-shelter": {
-      "delete": {
-        "tags": [
-          "Shelter"
-        ],
-        "description": "Endpoint to delete a shelter",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/get-users": {
+    "/user/get-users": {
       "get": {
         "tags": [
           "User"
@@ -315,7 +85,7 @@
         }
       }
     },
-    "/get-user": {
+    "/user/get-user": {
       "get": {
         "tags": [
           "User"
@@ -331,7 +101,7 @@
         }
       }
     },
-    "/create-user": {
+    "/user/create-user": {
       "post": {
         "tags": [
           "User"
@@ -382,7 +152,7 @@
         }
       }
     },
-    "/edit-user": {
+    "/user/edit-user": {
       "put": {
         "tags": [
           "User"
@@ -430,7 +200,7 @@
         }
       }
     },
-    "/delete-user/{id}": {
+    "/user/delete-user/{id}": {
       "delete": {
         "tags": [
           "User"
@@ -447,6 +217,134 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/shelter/get-all-people": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "description": "Endpoint to get all people",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/shelter/create-person": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "contact": {
+                  "example": "any"
+                },
+                "old_address": {
+                  "example": "any"
+                },
+                "new_address": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "id_shelter": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/people/get-all-people": {
+      "get": {
+        "tags": [
+          "People"
+        ],
+        "description": "Endpoint to get all people",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/people/create-person": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "birthday": {
+                  "example": "any"
+                },
+                "contact": {
+                  "example": "any"
+                },
+                "old_address": {
+                  "example": "any"
+                },
+                "new_address": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "id_shelter": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"

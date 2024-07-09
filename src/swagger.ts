@@ -26,7 +26,7 @@ const doc = {
 
 const outputFile = "../swagger_output.json";
 
-const endpointFiles = ["./routes/*"];
+const endpointFiles = ["./routes/mainRouter.ts"];
 
 const generateSwagger = async () => {
   await swaggerAutogen(outputFile, endpointFiles, doc);
