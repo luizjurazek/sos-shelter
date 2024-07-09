@@ -1,7 +1,7 @@
 import { Router } from "express";
 import loginRouter from "../routes/loginRouter";
 import peopleRouter from "../routes/peopleRouter";
-import shelterRouter from "../routes/peopleRouter";
+import shelterRouter from "../routes/shelterRouter";
 import userRouter from "../routes/userRouter";
 
 const mainRouter: Router = Router();

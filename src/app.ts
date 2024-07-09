@@ -16,16 +16,7 @@ app.use(express.json());
 // setup for swagger
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
+// Import all routes from mainRouter file
 app.use(mainRouter);
-
-// Sync datase when start application
-// sequelize
-//   .sync({ force: false })
-//   .then(() => {
-//     console.log("Database synced");
-//   })
-//   .catch((error) => {
-//     console.log("Has an erro while sync database: ", error);
-//   });
 
 export default app;
