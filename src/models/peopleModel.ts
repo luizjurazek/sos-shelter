@@ -1,9 +1,20 @@
-import DataTypes from "sequelize";
+import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../config/connection";
 import ShelterModel from "./shelterModel";
 
-const PeopleModel = sequelize.define(
-  "People",
+class People extends Model {
+  public id!: number;
+  public name!: string;
+  public birthday!: Date;
+  public contact?: string;
+  public old_address?: object;
+  public new_address?: object;
+  public cpf?: string;
+  public status!: string;
+  public id_shelter?: number;
+}
+
+People.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -22,11 +33,11 @@ const PeopleModel = sequelize.define(
     contact: {
       type: DataTypes.STRING,
     },
-    old_adress: {
+    old_address: {
       type: DataTypes.JSON,
       defaultValue: null,
     },
-    new_adress: {
+    new_address: {
       type: DataTypes.JSON,
       defaultValue: null,
     },
@@ -48,14 +59,15 @@ const PeopleModel = sequelize.define(
     },
   },
   {
+    sequelize,
     timestamps: true,
     modelName: "People",
-    tableName: "peoples",
+    tableName: "people",
   },
 );
 
-PeopleModel.belongsTo(ShelterModel, {
+People.belongsTo(ShelterModel, {
   foreignKey: "id_shelter",
 });
 
-export default PeopleModel;
+export default People;
