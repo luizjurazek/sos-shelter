@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
 import BlacklistToken from "./blacklistTokenController";
+import statusCode from "../utils/statusCode";
 dotenvConfig();
 
 const SECRET_JWT: jwt.Secret = process.env.SECRET_JWT || "Default_secret";
@@ -30,7 +31,7 @@ class LoginController {
           message: "User not found",
         };
 
-        return res.status(404).json(response);
+        return res.status(statusCode.NOT_FOUND).json(response);
       }
 
       // Compare password in bd with password inserted
@@ -40,7 +41,7 @@ class LoginController {
           message: "Email or password is wrong",
         };
 
-        return res.status(401).json(response);
+        return res.status(statusCode.UNAUTHORIZED).json(response);
       }
 
       // Seven days on miliseconds to expire the token valid
@@ -65,7 +66,7 @@ class LoginController {
         token: TOKEN,
       };
 
-      return res.status(200).json(response);
+      return res.status(statusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
@@ -80,7 +81,7 @@ class LoginController {
 
       if (!token) {
         const response = { error: true, message: "Authorization header missing" };
-        return res.status(400).json(response);
+        return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
       const insertedTokenOnBlacklist: boolean = await BlacklistTokenController.insertToken(token);
@@ -91,14 +92,14 @@ class LoginController {
           message: "There was an error while logging out",
         };
 
-        return res.status(500).json(response);
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).json(response);
       } else {
         const response: object = {
           error: true,
           message: "Logging out with successfully",
         };
 
-        return res.status(200).json(response);
+        return res.status(statusCode.OK).json(response);
       }
     } catch (error) {
       next(error);

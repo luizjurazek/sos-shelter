@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcrypt";
+import statusCode from "../utils/statusCode";
 
 const UserModel = User;
 
@@ -18,7 +19,7 @@ class UserController {
           message: "Users not found",
         };
 
-        return res.status(404).json(response);
+        return res.status(statusCode.NOT_FOUND).json(response);
       } else {
         const response: object = {
           error: false,
@@ -26,7 +27,7 @@ class UserController {
           users: allUsers,
         };
 
-        return res.status(200).json(response);
+        return res.status(statusCode.OK).json(response);
       }
     } catch (error) {
       next(error);
@@ -68,7 +69,7 @@ class UserController {
           message: "User not found",
         };
 
-        return res.status(404).json(response);
+        return res.status(statusCode.NOT_FOUND).json(response);
       } else {
         const response: object = {
           error: false,
@@ -76,7 +77,7 @@ class UserController {
           user,
         };
 
-        return res.status(200).json(response);
+        return res.status(statusCode.OK).json(response);
       }
     } catch (error) {
       next(error);
@@ -117,7 +118,7 @@ class UserController {
           message: "Has a erro while creating a user",
         };
 
-        return res.status(400).json(response);
+        return res.status(statusCode.BAD_REQUEST).json(response);
       } else {
         const response: object = {
           error: false,
@@ -125,7 +126,7 @@ class UserController {
           user: newUser,
         };
 
-        return res.status(201).json(response);
+        return res.status(statusCode.CREATED).json(response);
       }
     } catch (error) {
       next(error);
@@ -183,7 +184,7 @@ class UserController {
           },
         };
 
-        return res.status(200).json(response);
+        return res.status(statusCode.OK).json(response);
       }
     } catch (error) {
       next(error);
@@ -211,7 +212,7 @@ class UserController {
           id,
         };
 
-        res.status(400).json(response);
+        res.status(statusCode.BAD_REQUEST).json(response);
       } else {
         const response: object = {
           error: false,
@@ -219,7 +220,7 @@ class UserController {
           id,
         };
 
-        res.status(200).json(response);
+        res.status(statusCode.OK).json(response);
       }
     } catch (error) {
       next(error);

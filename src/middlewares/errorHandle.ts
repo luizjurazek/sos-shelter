@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError, errorDetails } from "../types/errorTypes";
+import statusCode from "../utils/statusCode";
 
 function errorHandle(error: CustomError, req: Request, res: Response, next: NextFunction) {
-  // verify if error have a statusCode defined if not, assign 500
-  const statusCode: number = error.statusCode || 500;
+  // verify if error have a statusCode defined if not, assign statusCode.INTERNAL_SERVER_ERROR
+  const statusCodeError: number = error.statusCode || statusCode.INTERNAL_SERVER_ERROR;
 
   let message: string = "Internal Server Error";
 
@@ -24,7 +25,7 @@ function errorHandle(error: CustomError, req: Request, res: Response, next: Next
     errorDetails.stack = error.stack;
   }
 
-  return res.status(statusCode).json(errorDetails);
+  return res.status(statusCodeError).json(errorDetails);
 }
 
 export default errorHandle;

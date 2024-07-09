@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
 import { Request, Response, NextFunction, response } from "express";
 import BlacklistToken from "../controllers/blacklistTokenController";
+import statusCode from "../utils/statusCode";
 dotenvConfig();
 
 const SECRET_JWT: jwt.Secret = process.env.SECRET_JWT || "Default secret";
@@ -18,7 +19,7 @@ async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction)
       auth: false,
       message: "No token provided",
     };
-    return res.status(401).json(response);
+    return res.status(statusCode.UNAUTHORIZED).json(response);
   }
 
   const isAlreadyTokenOnBlackList: boolean = await BlacklistTokenController.verifyTokenOnBlackList(TOKEN);
@@ -28,7 +29,7 @@ async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction)
       error: true,
       message: "Unauthorized user, do login again",
     };
-    return res.status(500).json(response);
+    return res.status(statusCode.INTERNAL_SERVER_ERROR).json(response);
   }
 
   jwt.verify(TOKEN, SECRET_JWT, function (error, decoded) {
@@ -37,7 +38,7 @@ async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction)
         error: true,
         messsage: "Failed to authenticate token",
       };
-      return res.status(500).json(response);
+      return res.status(statusCode.INTERNAL_SERVER_ERROR).json(response);
     }
 
     const decodedPayload = decoded as JwtPayload;

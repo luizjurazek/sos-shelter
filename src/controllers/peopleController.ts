@@ -44,7 +44,7 @@ class PeopleController {
 
       if (validateData !== true) {
         const error: CustomError = new Error("Has erros while create a person");
-        error.statusCode = 400;
+        error.statusCode = statusCode.BAD_REQUEST;
         error.errors = validateData;
         throw error;
       }
