@@ -14,7 +14,7 @@ class ShelterController {
     // #swagger.description = 'Endpoint to create a shelter'
     try {
       // Case data isnt validated throw an error
-      const validateData = await shelterValidatorData(req.body);
+      const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
       if (validateData !== true) {
         const error: CustomError = new Error("Has errors on data ");
         error.statusCode = 400;
@@ -29,7 +29,7 @@ class ShelterController {
         current_occupancy,
         amount_volunteers,
         id_admin_shelter,
-      }: { name: string; address: string; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
+      }: { name: string; address: object; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
 
       const shelterCreated = await ShelterModel.create({
         name,
@@ -125,6 +125,83 @@ class ShelterController {
     }
   }
 
+  // Method to edit a shelter
+  async editShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to edit a shelter'
+
+    // Case data isnt validated throw an error
+    try {
+      const validateData = await shelterValidatorData(req.body);
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has errors on data ");
+        error.statusCode = 400;
+        error.errors = validateData;
+        throw error;
+      }
+
+      const {
+        id,
+        name,
+        address,
+        max_capacity,
+        current_occupancy,
+        amount_volunteers,
+        id_admin_shelter,
+      }: {
+        id: number;
+        name: string;
+        address: JSON;
+        max_capacity: number;
+        current_occupancy: number;
+        amount_volunteers: number;
+        id_admin_shelter: number;
+      } = req.body;
+
+      const shelter = await ShelterModel.findByPk(id);
+
+      // case shelter is not found in bd return and error
+      if (shelter === null) {
+        const response: object = {
+          error: true,
+          message: "Shelter not found",
+          id,
+        };
+
+        return res.status(404).json(response);
+      }
+
+      const shelterUpdate = await ShelterModel.update({ name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter }, { where: { id }, returning: false });
+
+      if (shelterUpdate[0] !== 1) {
+        const response: object = {
+          error: true,
+          message: "Has an error while update the shelter, try again",
+        };
+
+        return res.status(400).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Shelter updated with succesfully",
+        old_data_shelter: shelter.dataValues,
+        new_data_shelter: {
+          name,
+          address,
+          max_capacity,
+          current_occupancy,
+          amount_volunteers,
+          id_admin_shelter,
+        },
+      };
+
+      return res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // method to delete a shelter
   async deleteShelter(req: Request, res: Response, next: NextFunction) {
     // #swagger.tags = ['Shelter']
@@ -175,67 +252,6 @@ class ShelterController {
     } catch (error) {
       next(error);
     }
-  }
-
-  // Method to edit a shelter
-  async editShelter(req: Request, res: Response, next: NextFunction) {
-    const {
-      id,
-      name,
-      address,
-      max_capacity,
-      current_occupancy,
-      amount_volunteers,
-      id_admin_shelter,
-    }: {
-      id: number;
-      name: string;
-      address: JSON;
-      max_capacity: number;
-      current_occupancy: number;
-      amount_volunteers: number;
-      id_admin_shelter: number;
-    } = req.body;
-
-    const shelter = await ShelterModel.findByPk(id);
-
-    // case shelter is not found in bd return and error
-    if (shelter === null) {
-      const response: object = {
-        error: true,
-        message: "Shelter not found",
-        id,
-      };
-
-      return res.status(404).json(response);
-    }
-
-    const shelterUpdate = await ShelterModel.update({ name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter }, { where: { id }, returning: false });
-
-    if (shelterUpdate[0] !== 1) {
-      const response: object = {
-        error: true,
-        message: "Has an error while update the shelter, try again",
-      };
-
-      return res.status(400).json(response);
-    }
-
-    const response: object = {
-      error: false,
-      message: "Shelter updated with succesfully",
-      old_data_shelter: shelter.dataValues,
-      new_data_shelter: {
-        name,
-        address,
-        max_capacity,
-        current_occupancy,
-        amount_volunteers,
-        id_admin_shelter,
-      },
-    };
-
-    return res.status(200).json(response);
   }
 }
 
