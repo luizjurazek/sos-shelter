@@ -8,6 +8,8 @@ const PeopleController = new controller();
 router.post("/create-person", PeopleController.createPerson);
 router.get("/get-all-people", PeopleController.getPeople);
 router.get("/get-person-by-id/:id", PeopleController.getPersonById);
+router.patch("/edit-person-by-id/", PeopleController.editPerson);
+router.delete("/delete-person-by-id/:id", PeopleController.deletePerson);
 
 router.use(errorHandle);
 

@@ -112,6 +112,102 @@ class PeopleController {
       next(error);
     }
   }
+
+  async editPerson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {
+        id,
+        name,
+        birthday,
+        contact,
+        old_address,
+        new_address,
+        cpf,
+        status,
+        id_shelter,
+      }: { id: number; name: string; birthday: Date; contact: string; old_address: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+
+      const person = await PeopleModel.findByPk(id);
+
+      if (person === null) {
+        const response: object = {
+          error: true,
+          message: "Person not found",
+          id,
+        };
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const personUpdate = await PeopleModel.update({ name, birthday, contact, old_address, new_address, cpf, status, id_shelter }, { where: { id } });
+      if (personUpdate[0] === 0) {
+        const response: object = {
+          error: true,
+          message: "Has an error whiler update person",
+          person,
+        };
+
+        return res.status(statusCode.BAD_REQUEST).json(response);
+      }
+
+      const personBeforeUpdate = await PeopleModel.findByPk(id);
+
+      const response: object = {
+        error: false,
+        message: "Person edited with succesfully",
+        old_data_person: person,
+        new_data_person: personBeforeUpdate,
+      };
+
+      return res.status(statusCode.ACCEPTED).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // endpoint to delete a person
+  async deletePerson(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['People']
+    // #swagger.description = 'Endpoint to delete a person by id'
+    try {
+      const id: number = parseInt(req.params.id);
+      const person: People | null = await PeopleModel.findByPk(id);
+
+      if (person === null) {
+        const response: object = {
+          error: true,
+          message: "Person not found",
+          id,
+        };
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const deletedPerson = await PeopleModel.destroy({
+        where: {
+          id,
+        },
+      });
+
+      if (deletedPerson === 0) {
+        const response: object = {
+          error: true,
+          message: "Has an error while delete person",
+          person,
+        };
+
+        return res.status(statusCode.BAD_REQUEST).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Person deleted with succesfully",
+        person,
+      };
+
+      return res.status(statusCode.OK).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default PeopleController;
