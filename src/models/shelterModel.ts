@@ -1,15 +1,24 @@
-import { DataTypes } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../config/connection";
 import UserModel from "./userModel";
 
-const ShelterModel = sequelize.define(
-  "Shelter",
+class Shelter extends Model {
+  public id!: number;
+  public name!: string;
+  public address!: object;
+  public max_capacity!: number;
+  public current_occupancy!: number;
+  public amount_volunteers!: number;
+  public id_admin_shelter!: number;
+}
+
+Shelter.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
@@ -48,14 +57,15 @@ const ShelterModel = sequelize.define(
     },
   },
   {
+    sequelize,
     timestamps: true,
     modelName: "Shelter",
     tableName: "shelters",
   },
 );
 
-ShelterModel.belongsTo(UserModel, {
+Shelter.belongsTo(UserModel, {
   foreignKey: "id_admin_shelter",
 });
 
-export default ShelterModel;
+export default Shelter;

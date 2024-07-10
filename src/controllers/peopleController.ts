@@ -3,7 +3,9 @@ import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
 import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
+import Shelter from "../models/shelterModel";
 
+const ShelterModel = Shelter;
 const PeopleModel = People;
 
 class PeopleController {
@@ -113,7 +115,59 @@ class PeopleController {
     }
   }
 
+  // Endpoint to get people by shelter
+  async getPeopleByShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['People']
+    // #swagger.description = 'Endpoint to get people by shelter'
+    try {
+      const id_shelter: number = parseInt(req.params.id);
+
+      const shelter: Shelter | null = await ShelterModel.findByPk(id_shelter);
+
+      if (shelter === null) {
+        const response: object = {
+          error: true,
+          message: "Shelter not found",
+          id_shelter,
+        };
+
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const peopleOnShelter: Array<People> = await PeopleModel.findAll({
+        where: {
+          id_shelter,
+        },
+      });
+
+      if (peopleOnShelter.length === 0) {
+        const response: object = {
+          error: false,
+          message: "Hasnt people on shelter",
+          shelter,
+          peopleOnShelter,
+        };
+
+        return res.status(statusCode.OK).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        massage: "People found with successfully on shelter",
+        shelter,
+        peopleOnShelter,
+      };
+
+      return res.status(statusCode.OK).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Endpoint to edit a person by id
   async editPerson(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['People']
+    // #swagger.description = 'Endpoint to edit a person by id'
     try {
       const {
         id,
