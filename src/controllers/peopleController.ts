@@ -1,6 +1,7 @@
 import People from "../models/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
+import { Op, literal } from "sequelize";
 import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
 import Shelter from "../models/shelterModel";
@@ -255,6 +256,44 @@ class PeopleController {
       }
 
       return res.status(statusCode.ACCEPTED).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // endpoint to get people by city
+  async getPeopleByOldAddress(req: Request, res: Response, next: NextFunction) {
+    try {
+      const address: string = req.params.address;
+
+      const people: Array<People> = await PeopleModel.findAll({
+        where: {
+          [Op.or]: [
+            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.street')) LIKE '%${address}%'`),
+            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.city')) LIKE '%${address}%'`),
+            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.state')) LIKE '%${address}%'`),
+            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.zipcode')) LIKE '%${address}%'`),
+          ],
+        },
+      });
+
+      if (people.length === 0) {
+        const response: object = {
+          error: true,
+          message: "People not found on address inserted",
+          address,
+        };
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const response: object = {
+        error: true,
+        message: "People found with successful on address inserted",
+        address,
+        people,
+      };
+
+      return res.status(statusCode.OK).json(response);
     } catch (error) {
       next(error);
     }

@@ -9,6 +9,7 @@ router.post("/create-person", PeopleController.createPerson);
 router.get("/get-all-people", PeopleController.getPeople);
 router.get("/get-person-by-id/:id", PeopleController.getPersonById);
 router.get("/get-people-by-shelter-id/:id", PeopleController.getPeopleByShelter);
+router.get("/get-people-by-old-address/:address", PeopleController.getPeopleByOldAddress);
 router.patch("/edit-person-by-id", PeopleController.editPerson);
 router.delete("/delete-person-by-id/:id", PeopleController.deletePerson);
 
