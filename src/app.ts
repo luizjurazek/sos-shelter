@@ -3,10 +3,6 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerFile from "../swagger_output.json";
 
 // Routers
-import userRouter from "./routes/userRouter";
-import loginRouter from "./routes/loginRouter";
-import shelterRouter from "./routes/shelterRouter";
-import peopleRouter from "./routes/peopleRouter";
 import mainRouter from "./routes/mainRouter";
 
 const app = express();

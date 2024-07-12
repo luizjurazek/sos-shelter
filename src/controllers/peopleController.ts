@@ -4,6 +4,7 @@ import { CustomError } from "../types/errorTypes";
 import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
 import Shelter from "../models/shelterModel";
+import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../utils/updateCurrentOccupancyOnShelter";
 
 const ShelterModel = Shelter;
 const PeopleModel = People;
@@ -78,6 +79,14 @@ class PeopleController {
         message: "Person created with successfully",
         person,
       };
+
+      // Do the update on current occupancy on shelter inserted
+      const updateCurrentShelter = await updateCurrentOccupancyOnShelter(id_shelter);
+
+      // if updateCurrentShelter return false update current occupancy in all  shelter table
+      if (!updateCurrentShelter) {
+        updateCurrentOccupancyOnAllShelter();
+      }
 
       return res.status(statusCode.CREATED).json(response);
     } catch (error) {
@@ -212,6 +221,14 @@ class PeopleController {
         new_data_person: personBeforeUpdate,
       };
 
+      // Do the update on current occupancy on shelter inserted
+      const updateCurrentShelter = await updateCurrentOccupancyOnShelter(id_shelter);
+
+      // if updateCurrentShelter return false update current occupancy in all  shelter table
+      if (!updateCurrentShelter) {
+        updateCurrentOccupancyOnAllShelter();
+      }
+
       return res.status(statusCode.ACCEPTED).json(response);
     } catch (error) {
       next(error);
@@ -256,6 +273,14 @@ class PeopleController {
         message: "Person deleted with succesfully",
         person,
       };
+
+      // Do the update on current occupancy on shelter inserted
+      const updateCurrentShelter = await updateCurrentOccupancyOnShelter(person.dataValues.id_shelter);
+
+      // if updateCurrentShelter return false update current occupancy in all  shelter table
+      if (!updateCurrentShelter) {
+        updateCurrentOccupancyOnAllShelter();
+      }
 
       return res.status(statusCode.OK).json(response);
     } catch (error) {
