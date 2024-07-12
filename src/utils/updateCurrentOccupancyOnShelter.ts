@@ -1,13 +1,11 @@
 import Shelter from "../models/shelterModel";
 import People from "../models/peopleModel";
 
-async function updateCurrentOccupancyOnAllShelter() {
-  const shelters = await Shelter.findAll();
-  const shelterIds = shelters.map((shelter) => shelter.dataValues.id);
+async function updateCurrentOccupancyOnAllShelter(): Promise<boolean> {
+  const shelters: Array<Shelter> = await Shelter.findAll();
+  const shelterIds: Array<number> = shelters.map((shelter) => shelter.dataValues.id);
 
-  // const people = await People.findAll();
-
-  shelterIds.forEach(async (id) => {
+  shelterIds.forEach(async (id: number) => {
     const peopleOnShelter: number = await People.count({
       where: {
         id_shelter: id,
@@ -21,14 +19,14 @@ async function updateCurrentOccupancyOnAllShelter() {
   return true;
 }
 
-async function updateCurrentOccupancyOnShelter(id_shelter: number) {
+async function updateCurrentOccupancyOnShelter(id_shelter: number): Promise<boolean> {
   const peopleOnShelter: number = await People.count({
     where: {
       id_shelter,
     },
   });
 
-  const shelterUpdated = await Shelter.update({ current_occupancy: peopleOnShelter }, { where: { id: id_shelter } });
+  const shelterUpdated: Array<number> = await Shelter.update({ current_occupancy: peopleOnShelter }, { where: { id: id_shelter } });
 
   if (shelterUpdated[0] !== 1) {
     return false;

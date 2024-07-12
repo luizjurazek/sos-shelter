@@ -1,6 +1,6 @@
 import Shelter from "../models/shelterModel";
 
-async function checkVacancyOnShelter(id_shelter: number) {
+async function checkVacancyOnShelter(id_shelter: number): Promise<boolean> {
   const shelter: Shelter | null = await Shelter.findByPk(id_shelter);
 
   if (shelter === null) {
