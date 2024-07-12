@@ -5,6 +5,7 @@ import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
 import Shelter from "../models/shelterModel";
 import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../utils/updateCurrentOccupancyOnShelter";
+import { checkVacancyOnShelter } from "../utils/checkVacancyOnshelter";
 
 const ShelterModel = Shelter;
 const PeopleModel = People;
@@ -62,6 +63,18 @@ class PeopleController {
         status,
         id_shelter,
       }: { name: string; birthday: Date; contact: string; old_address: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+
+      const hasVacancyOnShelter: boolean = await checkVacancyOnShelter(id_shelter);
+
+      if (!hasVacancyOnShelter) {
+        const response: object = {
+          error: true,
+          message: "Hasnt vacancy on shelter, try other",
+          id_shelter,
+        };
+
+        return res.status(statusCode.BAD_REQUEST).json(response);
+      }
 
       const person: People | null = await PeopleModel.create({ name, birthday, contact, old_address, new_address, cpf, status, id_shelter });
 
@@ -199,6 +212,18 @@ class PeopleController {
           id,
         };
         return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const hasVacancyOnShelter: boolean = await checkVacancyOnShelter(id_shelter);
+
+      if (!hasVacancyOnShelter) {
+        const response: object = {
+          error: true,
+          message: "Hasnt vacancy on shelter, try other",
+          id_shelter,
+        };
+
+        return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
       const personUpdate = await PeopleModel.update({ name, birthday, contact, old_address, new_address, cpf, status, id_shelter }, { where: { id } });
