@@ -10,6 +10,9 @@ class Shelter extends Model {
   public current_occupancy!: number;
   public amount_volunteers!: number;
   public id_admin_shelter!: number;
+
+  // Definir associação com User
+  public readonly admin?: UserModel;
 }
 
 Shelter.init(
@@ -49,10 +52,10 @@ Shelter.init(
     },
     id_admin_shelter: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: "User",
-        key: "id",
+        model: "User", // Nome do modelo referenciado
+        key: "id", // Nome do campo na tabela User
       },
     },
   },
@@ -63,9 +66,5 @@ Shelter.init(
     tableName: "shelters",
   },
 );
-
-Shelter.belongsTo(UserModel, {
-  foreignKey: "id_admin_shelter",
-});
 
 export default Shelter;

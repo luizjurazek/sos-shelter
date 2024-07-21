@@ -28,8 +28,8 @@ async function peopleValidatorData(data: People) {
     errors.push("contact need to have the following pattern: (xx)xxxxx-xxxx");
   }
 
-  if (typeof data.old_address !== "object") {
-    errors.push("old address must be an object ");
+  if (typeof data.old_address_id !== "number") {
+    errors.push("old address must be an number ");
   }
 
   if (typeof data.new_address !== "object") {

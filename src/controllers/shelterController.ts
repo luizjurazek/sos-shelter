@@ -30,7 +30,7 @@ class ShelterController {
         current_occupancy,
         amount_volunteers,
         id_admin_shelter,
-      }: { name: string; address: object; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number } = req.body;
+      }: { name: string; address: object; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number | null } = req.body;
 
       const shelterCreated = await ShelterModel.create({
         name,

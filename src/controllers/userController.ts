@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/userModel";
 import bcrypt from "bcrypt";
 import statusCode from "../utils/statusCode";
+import { userValidatorData } from "../utils/userValidatorData";
+import { CustomError } from "../types/errorTypes";
 
 const UserModel = User;
 
@@ -98,6 +100,17 @@ class UserController {
         role,
         id_shelter,
       }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: string; id_shelter: number } = req.body;
+
+      // Check if data is following the rules
+      const validateData: Array<string> | boolean = await userValidatorData(req.body);
+
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has erros while create a person");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
+
       const salt = bcrypt.genSaltSync(10);
       const password = await bcrypt.hash(req.body.password, salt);
 
@@ -147,6 +160,7 @@ class UserController {
         phonenumber,
         password,
         role,
+        id_shelter,
       }: {
         id: number;
         name: string;
@@ -156,13 +170,24 @@ class UserController {
         phonenumber: string;
         password: string;
         role: string;
+        id_shelter: number;
       } = req.body;
+
+      // Check if data is following the rules
+      const validateData: Array<string> | boolean = await userValidatorData(req.body);
+
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has erros while create a person");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const user = await UserModel.findOne({ where: { id } });
 
       if (user != null) {
         await UserModel.update(
-          { name, lastname, birthday, email, phonenumber, password, role },
+          { name, lastname, birthday, email, phonenumber, password, role, id_shelter },
           {
             where: { id },
             returning: true,
@@ -204,7 +229,6 @@ class UserController {
         },
       });
 
-      console.log(deletedUser);
       if (deletedUser === 0) {
         const response: object = {
           error: true,

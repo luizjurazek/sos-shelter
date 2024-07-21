@@ -1,13 +1,14 @@
-import { Model, DataTypes, Optional } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../config/connection";
 import ShelterModel from "./shelterModel";
+import PeopleOldAddressModel from "./address/peopleOldAddressModel";
 
 class People extends Model {
   public id!: number;
   public name!: string;
   public birthday!: Date;
   public contact?: string;
-  public old_address?: object;
+  public old_address_id?: object;
   public new_address?: object;
   public cpf?: string;
   public status!: string;
@@ -33,12 +34,12 @@ People.init(
     contact: {
       type: DataTypes.STRING,
     },
-    old_address: {
-      type: DataTypes.JSON,
+    old_address_id: {
+      type: DataTypes.INTEGER,
       defaultValue: null,
-      get() {
-        const rawValue = this.getDataValue("old_address");
-        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      references: {
+        model: "PeopleOldAddress",
+        key: "id",
       },
     },
     new_address: {

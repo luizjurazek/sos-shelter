@@ -13,14 +13,4 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
 });
 
-// Sync datase when start application
-// sequelize
-//   .sync({ force: false })
-//   .then(() => {
-//     console.log("Database synced");
-//   })
-//   .catch((error) => {
-//     console.log("Has an erro while sync database: ", error);
-//   });
-
 export { sequelize };

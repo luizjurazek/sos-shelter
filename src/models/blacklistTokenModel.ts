@@ -5,7 +5,7 @@ const BlacklistTokenModel = sequelize.define(
   "BlacklistToken",
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
@@ -13,6 +13,13 @@ const BlacklistTokenModel = sequelize.define(
     token: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    id_user: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "User",
+        key: "id",
+      },
     },
   },
   {

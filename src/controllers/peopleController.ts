@@ -58,12 +58,12 @@ class PeopleController {
         name,
         birthday,
         contact,
-        old_address,
+        old_address_id,
         new_address,
         cpf,
         status,
         id_shelter,
-      }: { name: string; birthday: Date; contact: string; old_address: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+      }: { name: string; birthday: Date; contact: string; old_address_id: number; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
 
       const hasVacancyOnShelter: boolean = await checkVacancyOnShelter(id_shelter);
 
@@ -77,7 +77,7 @@ class PeopleController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const person: People | null = await PeopleModel.create({ name, birthday, contact, old_address, new_address, cpf, status, id_shelter });
+      const person: People | null = await PeopleModel.create({ name, birthday, contact, old_address_id, new_address, cpf, status, id_shelter });
 
       if (person === null) {
         const response: object = {
@@ -197,12 +197,12 @@ class PeopleController {
         name,
         birthday,
         contact,
-        old_address,
+        old_address_id,
         new_address,
         cpf,
         status,
         id_shelter,
-      }: { id: number; name: string; birthday: Date; contact: string; old_address: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+      }: { id: number; name: string; birthday: Date; contact: string; old_address_id: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
 
       const person = await PeopleModel.findByPk(id);
 
@@ -227,7 +227,7 @@ class PeopleController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const personUpdate = await PeopleModel.update({ name, birthday, contact, old_address, new_address, cpf, status, id_shelter }, { where: { id } });
+      const personUpdate = await PeopleModel.update({ name, birthday, contact, old_address_id, new_address, cpf, status, id_shelter }, { where: { id } });
       if (personUpdate[0] === 0) {
         const response: object = {
           error: true,
@@ -261,43 +261,19 @@ class PeopleController {
     }
   }
 
-  // endpoint to get people by city
-  async getPeopleByOldAddress(req: Request, res: Response, next: NextFunction) {
-    try {
-      const address: string = req.params.address;
+  // // endpoint to get people by Address
+  // async getPeopleByOldAddress(req: Request, res: Response, next: NextFunction) {
+  //   // #swagger.tags = ['People']
+  //   // #swagger.description = 'Endpoint to get people on a address'
 
-      const people: Array<People> = await PeopleModel.findAll({
-        where: {
-          [Op.or]: [
-            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.street')) LIKE '%${address}%'`),
-            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.city')) LIKE '%${address}%'`),
-            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.state')) LIKE '%${address}%'`),
-            literal(`JSON_UNQUOTE(JSON_EXTRACT(old_address, '$.zipcode')) LIKE '%${address}%'`),
-          ],
-        },
-      });
+  // }
 
-      if (people.length === 0) {
-        const response: object = {
-          error: true,
-          message: "People not found on address inserted",
-          address,
-        };
-        return res.status(statusCode.NOT_FOUND).json(response);
-      }
+  // // endpoint to get people city
+  // async getPeopleByOldCity(req: Request, res: Response, next: NextFunction) {
+  //   // #swagger.tags = ['People']
+  //   // #swagger.description = 'Endpoint to get people on a city'
 
-      const response: object = {
-        error: true,
-        message: "People found with successful on address inserted",
-        address,
-        people,
-      };
-
-      return res.status(statusCode.OK).json(response);
-    } catch (error) {
-      next(error);
-    }
-  }
+  // }
 
   // endpoint to delete a person
   async deletePerson(req: Request, res: Response, next: NextFunction) {
@@ -345,6 +321,51 @@ class PeopleController {
       if (!updateCurrentShelter) {
         updateCurrentOccupancyOnAllShelter();
       }
+
+      return res.status(statusCode.OK).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // method to remove a person from shelter
+  async removePersonFromShelter(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to remove a person from shelter'
+    try {
+      const id_person: number = parseInt(req.params.id_person);
+      const person: People | null = await PeopleModel.findByPk(id_person);
+
+      console.log(person);
+      if (person === null) {
+        const error: CustomError = new Error("Person not found");
+        error.statusCode = statusCode.NOT_FOUND;
+        throw error;
+      }
+
+      const updatedPerson = await PeopleModel.update(
+        {
+          id_shelter: null,
+        },
+        {
+          where: {
+            id: id_person,
+          },
+        },
+      );
+
+      console.log(updatedPerson);
+      if (updatedPerson[0] !== 1) {
+        const error: CustomError = new Error("Has an erro while remove person from shelter");
+        error.statusCode = statusCode.NOT_FOUND;
+        throw error;
+      }
+
+      const response: object = {
+        error: false,
+        message: "Person removed from shelter with successful",
+        person,
+      };
 
       return res.status(statusCode.OK).json(response);
     } catch (error) {

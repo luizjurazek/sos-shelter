@@ -27,9 +27,10 @@ async function shelterValidatorData(data: ShelterAttributes) {
   if (data.amount_volunteers === undefined || typeof data.amount_volunteers !== "number") {
     errors.push("amount_volunteers must be filled and a number");
   }
-  if (data.id_admin_shelter === undefined || typeof data.id_admin_shelter !== "number") {
-    errors.push("id_admin_shelter must be filled and a number");
-  }
+
+  // if (data.id_admin_shelter !== null || typeof data.id_admin_shelter !== "number") {
+  //   errors.push("id_admin_shelter must be a number or null");
+  // }
 
   if (errors.length > 0) {
     return errors;
