@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/userModel";
+import User from "../models/user/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";

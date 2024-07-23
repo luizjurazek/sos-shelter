@@ -1,25 +1,15 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../../config/connection";
-import PeopleModel from "../peopleModel";
 
-class PeopleOldAddress extends Model {
-  public id!: number;
-  public country!: string;
-  public state!: string;
-  public city!: string;
-  public street!: string;
-  public zipcode!: string;
-  public number!: string;
-  public complement!: Text;
-}
+class PeopleNewAddress extends Model {}
 
-PeopleOldAddress.init(
+PeopleNewAddress.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
       allowNull: false,
+      autoIncrement: true,
     },
     country: {
       type: DataTypes.STRING,
@@ -56,10 +46,10 @@ PeopleOldAddress.init(
   },
   {
     sequelize,
+    modelName: "PeopleNewAddress",
+    tableName: "people_new_address",
     timestamps: true,
-    modelName: "PeopleOldAddress",
-    tableName: "people-old-address",
   },
 );
 
-export default PeopleOldAddress;
+export default PeopleNewAddress;

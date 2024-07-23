@@ -1,4 +1,4 @@
-import People from "../models/peopleModel";
+import People from "../models/people/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
 import { Op, literal } from "sequelize";

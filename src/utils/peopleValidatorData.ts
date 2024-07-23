@@ -1,4 +1,4 @@
-import People from "../models/peopleModel";
+import People from "../models/people/peopleModel";
 
 async function peopleValidatorData(data: People) {
   const errors: Array<string> = [];

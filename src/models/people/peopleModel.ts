@@ -1,19 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../config/connection";
-import ShelterModel from "./shelterModel";
-import PeopleOldAddressModel from "./address/peopleOldAddressModel";
+import { sequelize } from "../../config/connection";
 
-class People extends Model {
-  public id!: number;
-  public name!: string;
-  public birthday!: Date;
-  public contact?: string;
-  public old_address_id?: object;
-  public new_address?: object;
-  public cpf?: string;
-  public status!: string;
-  public id_shelter?: number;
-}
+class People extends Model {}
 
 People.init(
   {
@@ -31,23 +19,25 @@ People.init(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    contact: {
+    phonenumber: {
       type: DataTypes.STRING,
     },
-    old_address_id: {
+    old_address: {
       type: DataTypes.INTEGER,
       defaultValue: null,
+      allowNull: true,
       references: {
         model: "PeopleOldAddress",
         key: "id",
       },
     },
     new_address: {
-      type: DataTypes.JSON,
+      type: DataTypes.INTEGER,
       defaultValue: null,
-      get() {
-        const rawValue = this.getDataValue("new_address");
-        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      allowNull: true,
+      references: {
+        model: "PeopleNewAddress",
+        key: "id",
       },
     },
     cpf: {
@@ -55,8 +45,12 @@ People.init(
       defaultValue: null,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "PeopleStatus",
+        key: "id",
+      },
     },
     id_shelter: {
       type: DataTypes.INTEGER,
@@ -74,9 +68,5 @@ People.init(
     tableName: "people",
   },
 );
-
-People.belongsTo(ShelterModel, {
-  foreignKey: "id_shelter",
-});
 
 export default People;

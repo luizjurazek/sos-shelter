@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Shelter from "../models/shelterModel";
 import { Op, literal } from "sequelize";
-import PeopleModel from "../models/peopleModel";
+import PeopleModel from "../models/people/peopleModel";
 import { shelterValidatorData } from "../utils/shelterValidatorData";
 import { CustomError } from "../types/errorTypes";
 import statusCode from "../utils/statusCode";

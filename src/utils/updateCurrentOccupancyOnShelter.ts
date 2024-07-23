@@ -1,5 +1,5 @@
 import Shelter from "../models/shelterModel";
-import People from "../models/peopleModel";
+import People from "../models/people/peopleModel";
 
 async function updateCurrentOccupancyOnAllShelter(): Promise<boolean> {
   const shelters: Array<Shelter> = await Shelter.findAll();

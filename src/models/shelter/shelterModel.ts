@@ -1,19 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../config/connection";
-import UserModel from "./userModel";
+import { sequelize } from "../../config/connection";
 
-class Shelter extends Model {
-  public id!: number;
-  public name!: string;
-  public address!: object;
-  public max_capacity!: number;
-  public current_occupancy!: number;
-  public amount_volunteers!: number;
-  public id_admin_shelter!: number;
-
-  // Definir associação com User
-  public readonly admin?: UserModel;
-}
+class Shelter extends Model {}
 
 Shelter.init(
   {
@@ -28,11 +16,11 @@ Shelter.init(
       allowNull: false,
     },
     address: {
-      type: DataTypes.JSON,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      get() {
-        const rawValue = this.getDataValue("address");
-        return typeof rawValue === "string" ? JSON.parse(rawValue) : rawValue;
+      references: {
+        model: "ShelterAddress",
+        key: "id",
       },
     },
     max_capacity: {
@@ -54,8 +42,8 @@ Shelter.init(
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: "User", // Nome do modelo referenciado
-        key: "id", // Nome do campo na tabela User
+        model: "User",
+        key: "id",
       },
     },
   },

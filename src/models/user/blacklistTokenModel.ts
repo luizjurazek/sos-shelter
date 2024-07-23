@@ -1,8 +1,9 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../config/connection";
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../../config/connection";
 
-const BlacklistTokenModel = sequelize.define(
-  "BlacklistToken",
+class BlacklistToken extends Model {}
+
+BlacklistToken.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -23,10 +24,11 @@ const BlacklistTokenModel = sequelize.define(
     },
   },
   {
+    sequelize,
     timestamps: true,
     modelName: "BlacklistToken",
-    tableName: "BlacklistTokens",
+    tableName: "blacklist_tokens",
   },
 );
 
-export default BlacklistTokenModel;
+export default BlacklistToken;

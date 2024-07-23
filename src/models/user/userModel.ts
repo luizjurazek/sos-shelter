@@ -1,21 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../config/connection";
-import ShelterModel from "./shelterModel";
+import { sequelize } from "../../config/connection";
 
-class User extends Model {
-  public id!: number;
-  public name!: string;
-  public lastname!: string;
-  public birthday!: Date;
-  public email!: string;
-  public phonenumber!: string;
-  public password!: string;
-  public role!: string;
-  public id_shelter!: number | null; // Permitir que id_shelter seja null
-
-  // Definir associação com Shelter
-  public readonly shelter?: ShelterModel;
-}
+class User extends Model {}
 
 User.init(
   {
@@ -50,15 +36,19 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: "UserRole",
+        key: "id",
+      },
     },
     id_shelter: {
       type: DataTypes.INTEGER,
-      allowNull: true, // Permitir que id_shelter seja null
+      allowNull: true,
       references: {
-        model: "Shelter", // Nome do modelo referenciado
-        key: "id", // Nome do campo na tabela Shelter
+        model: "Shelter",
+        key: "id",
       },
     },
   },
