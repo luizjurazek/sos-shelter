@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Shelter from "../models/shelter/shelterModel";
 import { Op, literal } from "sequelize";
 import PeopleModel from "../models/people/peopleModel";
-// import { shelterValidatorData } from "../utils/shelterValidatorData";
+import { shelterValidatorData } from "../utils/shelterValidatorData";
 import { CustomError } from "../types/errorTypes";
 import statusCode from "../utils/statusCode";
 
@@ -15,13 +15,13 @@ class ShelterController {
     // #swagger.description = 'Endpoint to create a shelter'
     try {
       // Case data isnt validated throw an error
-      // const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
-      // if (validateData !== true) {
-      //   const error: CustomError = new Error("Has errors on data ");
-      //   error.statusCode = statusCode.BAD_REQUEST;
-      //   error.errors = validateData;
-      //   throw error;
-      // }
+      const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has errors on data ");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const {
         name,
@@ -103,13 +103,13 @@ class ShelterController {
 
     // Case data isnt validated throw an error
     try {
-      // const validateData = await shelterValidatorData(req.body);
-      // if (validateData !== true) {
-      //   const error: CustomError = new Error("Has errors on data ");
-      //   error.statusCode = statusCode.BAD_REQUEST;
-      //   error.errors = validateData;
-      //   throw error;
-      // }
+      const validateData = await shelterValidatorData(req.body);
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has errors on data ");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const {
         id,

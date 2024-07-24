@@ -1,7 +1,7 @@
 import People from "../models/people/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
-// import peopleValidatorData from "../utils/peopleValidatorData";
+import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
 import Shelter from "../models/shelter/shelterModel";
 import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../utils/updateCurrentOccupancyOnShelter";
@@ -44,14 +44,14 @@ class PeopleController {
     // #swagger.tags = ['People']
     // #swagger.description = 'Endpoint to create a people'
     try {
-      // const validateData: Array<string> | boolean = await peopleValidatorData(req.body);
+      const validateData: Array<string> | boolean = await peopleValidatorData(req.body);
 
-      // // if (validateData !== true) {
-      // //   const error: CustomError = new Error("Has erros while create a person");
-      // //   error.statusCode = statusCode.BAD_REQUEST;
-      // //   error.errors = validateData;
-      // //   throw error;
-      // // }
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has erros while create a person");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const {
         name,

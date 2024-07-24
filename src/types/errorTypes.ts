@@ -7,7 +7,7 @@ interface errorDetails {
 
 interface CustomError extends Error {
   statusCode?: number;
-  errors?: Array<string>;
+  errors?: Array<string> | boolean;
 }
 
 export { errorDetails, CustomError };
