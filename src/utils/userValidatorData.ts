@@ -1,6 +1,6 @@
-import User from "../models/user/userModel";
+import { UserAttributes } from "../types/userTypes";
 
-async function userValidatorData(data: User) {
+async function userValidatorData(data: UserAttributes) {
   const errors: Array<string> = [];
 
   if (data.id) {
@@ -34,8 +34,8 @@ async function userValidatorData(data: User) {
     errors.push("phonenumber need to have the following pattern: (xx)xxxxx-xxxx");
   }
 
-  if (!data.role || typeof data.role !== "string") {
-    errors.push("role must be filled and a string");
+  if (!data.role || typeof data.role !== "number") {
+    errors.push("role must be filled and a number");
   }
 
   if (!data.id_shelter || typeof data.id_shelter !== "number") {

@@ -102,14 +102,14 @@ class UserController {
       }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: number; id_shelter: number } = req.body;
 
       // Check if data is following the rules
-      // const validateData: Array<string> | boolean = await userValidatorData(req.body);
+      const validateData: Array<string> | boolean = await userValidatorData(req.body);
 
-      // if (validateData !== true) {
-      //   const error: CustomError = new Error("Has erros while create a person");
-      //   error.statusCode = statusCode.BAD_REQUEST;
-      //   error.errors = validateData;
-      //   throw error;
-      // }
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has erros while create a person");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const salt = bcrypt.genSaltSync(10);
       const password = await bcrypt.hash(req.body.password, salt);
@@ -174,20 +174,23 @@ class UserController {
       } = req.body;
 
       // Check if data is following the rules
-      // const validateData: Array<string> | boolean = await userValidatorData(req.body);
+      const validateData: Array<string> | boolean = await userValidatorData(req.body);
 
-      // if (validateData !== true) {
-      //   const error: CustomError = new Error("Has erros while create a person");
-      //   error.statusCode = statusCode.BAD_REQUEST;
-      //   error.errors = validateData;
-      //   throw error;
-      // }
+      if (validateData !== true) {
+        const error: CustomError = new Error("Has erros while create a person");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = validateData;
+        throw error;
+      }
 
       const user = await UserModel.findOne({ where: { id } });
 
+      const salt = bcrypt.genSaltSync(10);
+      const passwordHashed = await bcrypt.hash(password, salt);
+
       if (user != null) {
         await UserModel.update(
-          { name, lastname, birthday, email, phonenumber, password, role, id_shelter },
+          { name, lastname, birthday, email, phonenumber, passwordHashed, role, id_shelter },
           {
             where: { id },
             returning: true,

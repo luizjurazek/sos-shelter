@@ -2,7 +2,7 @@ interface errorDetails {
   error: boolean;
   message: string;
   stack?: string;
-  errors?: Array<string>;
+  errors?: Array<string> | boolean;
 }
 
 interface CustomError extends Error {

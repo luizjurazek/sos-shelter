@@ -7,7 +7,8 @@ interface UserAttributes {
   email: string;
   phonenumber: string;
   password: string;
-  role: string;
+  role: number;
+  id_shelter?: number | null;
 }
 
 export { UserAttributes };
