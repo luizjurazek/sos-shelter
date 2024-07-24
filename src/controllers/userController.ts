@@ -99,17 +99,17 @@ class UserController {
         phonenumber,
         role,
         id_shelter,
-      }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: string; id_shelter: number } = req.body;
+      }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: number; id_shelter: number } = req.body;
 
       // Check if data is following the rules
-      const validateData: Array<string> | boolean = await userValidatorData(req.body);
+      // const validateData: Array<string> | boolean = await userValidatorData(req.body);
 
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has erros while create a person");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
+      // if (validateData !== true) {
+      //   const error: CustomError = new Error("Has erros while create a person");
+      //   error.statusCode = statusCode.BAD_REQUEST;
+      //   error.errors = validateData;
+      //   throw error;
+      // }
 
       const salt = bcrypt.genSaltSync(10);
       const password = await bcrypt.hash(req.body.password, salt);
@@ -169,19 +169,19 @@ class UserController {
         email: string;
         phonenumber: string;
         password: string;
-        role: string;
+        role: number;
         id_shelter: number;
       } = req.body;
 
       // Check if data is following the rules
-      const validateData: Array<string> | boolean = await userValidatorData(req.body);
+      // const validateData: Array<string> | boolean = await userValidatorData(req.body);
 
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has erros while create a person");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
+      // if (validateData !== true) {
+      //   const error: CustomError = new Error("Has erros while create a person");
+      //   error.statusCode = statusCode.BAD_REQUEST;
+      //   error.errors = validateData;
+      //   throw error;
+      // }
 
       const user = await UserModel.findOne({ where: { id } });
 

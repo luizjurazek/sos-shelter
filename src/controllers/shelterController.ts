@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import Shelter from "../models/shelterModel";
+import Shelter from "../models/shelter/shelterModel";
 import { Op, literal } from "sequelize";
 import PeopleModel from "../models/people/peopleModel";
-import { shelterValidatorData } from "../utils/shelterValidatorData";
+// import { shelterValidatorData } from "../utils/shelterValidatorData";
 import { CustomError } from "../types/errorTypes";
 import statusCode from "../utils/statusCode";
 
@@ -15,13 +15,13 @@ class ShelterController {
     // #swagger.description = 'Endpoint to create a shelter'
     try {
       // Case data isnt validated throw an error
-      const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has errors on data ");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
+      // const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
+      // if (validateData !== true) {
+      //   const error: CustomError = new Error("Has errors on data ");
+      //   error.statusCode = statusCode.BAD_REQUEST;
+      //   error.errors = validateData;
+      //   throw error;
+      // }
 
       const {
         name,
@@ -30,7 +30,7 @@ class ShelterController {
         current_occupancy,
         amount_volunteers,
         id_admin_shelter,
-      }: { name: string; address: object; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number | null } = req.body;
+      }: { name: string; address: number; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number | null } = req.body;
 
       const shelterCreated = await ShelterModel.create({
         name,
@@ -90,41 +90,11 @@ class ShelterController {
     }
   }
 
-  // method to get shelters by city
-  async getSheltersByCity(req: Request, res: Response, next: NextFunction) {
-    // #swagger.tags = ['Shelter']
-    // #swagger.description = 'Endpoint to get all shelters by city'
-    try {
-      const city: string = req.params.city;
-
-      const shelters = await ShelterModel.findAll({
-        where: {
-          [Op.and]: [literal(`JSON_UNQUOTE(JSON_EXTRACT(address, '$.city')) LIKE '%${city}%'`)],
-        },
-      });
-
-      if (shelters.length === 0) {
-        const response: object = {
-          error: true,
-          message: "Shelters not found",
-          city,
-        };
-
-        return res.status(statusCode.NOT_FOUND).json(response);
-      }
-
-      const response: object = {
-        error: false,
-        message: "Shelters found with successfully",
-        city,
-        shelters,
-      };
-
-      return res.status(statusCode.OK).json(response);
-    } catch (error) {
-      next(error);
-    }
-  }
+  // // method to get shelters by city
+  // async getSheltersByCity(req: Request, res: Response, next: NextFunction) {
+  //   // #swagger.tags = ['Shelter']
+  //   // #swagger.description = 'Endpoint to get all shelters by city'
+  // }
 
   // Method to edit a shelter
   async editShelter(req: Request, res: Response, next: NextFunction) {
@@ -133,13 +103,13 @@ class ShelterController {
 
     // Case data isnt validated throw an error
     try {
-      const validateData = await shelterValidatorData(req.body);
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has errors on data ");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
+      // const validateData = await shelterValidatorData(req.body);
+      // if (validateData !== true) {
+      //   const error: CustomError = new Error("Has errors on data ");
+      //   error.statusCode = statusCode.BAD_REQUEST;
+      //   error.errors = validateData;
+      //   throw error;
+      // }
 
       const {
         id,
@@ -152,7 +122,7 @@ class ShelterController {
       }: {
         id: number;
         name: string;
-        address: JSON;
+        address: number;
         max_capacity: number;
         current_occupancy: number;
         amount_volunteers: number;

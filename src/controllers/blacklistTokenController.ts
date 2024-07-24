@@ -4,6 +4,7 @@ const BlacklistTokenModel = BlacklistToken;
 
 class BlacklistTokenController {
   // Insert a token on black list
+
   async insertToken(token: string) {
     const tokenInserted = await BlacklistTokenModel.create({
       token,

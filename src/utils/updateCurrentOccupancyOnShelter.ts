@@ -1,4 +1,4 @@
-import Shelter from "../models/shelterModel";
+import Shelter from "../models/shelter/shelterModel";
 import People from "../models/people/peopleModel";
 
 async function updateCurrentOccupancyOnAllShelter(): Promise<boolean> {

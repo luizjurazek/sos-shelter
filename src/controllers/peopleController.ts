@@ -1,10 +1,9 @@
 import People from "../models/people/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/errorTypes";
-import { Op, literal } from "sequelize";
-import peopleValidatorData from "../utils/peopleValidatorData";
+// import peopleValidatorData from "../utils/peopleValidatorData";
 import statusCode from "../utils/statusCode";
-import Shelter from "../models/shelterModel";
+import Shelter from "../models/shelter/shelterModel";
 import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../utils/updateCurrentOccupancyOnShelter";
 import { checkVacancyOnShelter } from "../utils/checkVacancyOnshelter";
 
@@ -45,25 +44,25 @@ class PeopleController {
     // #swagger.tags = ['People']
     // #swagger.description = 'Endpoint to create a people'
     try {
-      const validateData: Array<string> | boolean = await peopleValidatorData(req.body);
+      // const validateData: Array<string> | boolean = await peopleValidatorData(req.body);
 
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has erros while create a person");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
+      // // if (validateData !== true) {
+      // //   const error: CustomError = new Error("Has erros while create a person");
+      // //   error.statusCode = statusCode.BAD_REQUEST;
+      // //   error.errors = validateData;
+      // //   throw error;
+      // // }
 
       const {
         name,
         birthday,
-        contact,
-        old_address_id,
+        phonenumber,
+        old_address,
         new_address,
         cpf,
         status,
         id_shelter,
-      }: { name: string; birthday: Date; contact: string; old_address_id: number; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+      }: { name: string; birthday: Date; phonenumber: string; old_address: number; new_address: number; cpf: string; status: number; id_shelter: number } = req.body;
 
       const hasVacancyOnShelter: boolean = await checkVacancyOnShelter(id_shelter);
 
@@ -77,7 +76,7 @@ class PeopleController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const person: People | null = await PeopleModel.create({ name, birthday, contact, old_address_id, new_address, cpf, status, id_shelter });
+      const person: People | null = await PeopleModel.create({ name, birthday, phonenumber, old_address, new_address, cpf, status, id_shelter });
 
       if (person === null) {
         const response: object = {
@@ -196,13 +195,13 @@ class PeopleController {
         id,
         name,
         birthday,
-        contact,
-        old_address_id,
+        phonenumber,
+        old_address,
         new_address,
         cpf,
         status,
         id_shelter,
-      }: { id: number; name: string; birthday: Date; contact: string; old_address_id: object; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
+      }: { id: number; name: string; birthday: Date; phonenumber: string; old_address: number; new_address: object; cpf: string; status: number; id_shelter: number } = req.body;
 
       const person = await PeopleModel.findByPk(id);
 
@@ -227,7 +226,7 @@ class PeopleController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const personUpdate = await PeopleModel.update({ name, birthday, contact, old_address_id, new_address, cpf, status, id_shelter }, { where: { id } });
+      const personUpdate = await PeopleModel.update({ name, birthday, phonenumber, old_address, new_address, cpf, status, id_shelter }, { where: { id } });
       if (personUpdate[0] === 0) {
         const response: object = {
           error: true,
@@ -260,20 +259,6 @@ class PeopleController {
       next(error);
     }
   }
-
-  // // endpoint to get people by Address
-  // async getPeopleByOldAddress(req: Request, res: Response, next: NextFunction) {
-  //   // #swagger.tags = ['People']
-  //   // #swagger.description = 'Endpoint to get people on a address'
-
-  // }
-
-  // // endpoint to get people city
-  // async getPeopleByOldCity(req: Request, res: Response, next: NextFunction) {
-  //   // #swagger.tags = ['People']
-  //   // #swagger.description = 'Endpoint to get people on a city'
-
-  // }
 
   // endpoint to delete a person
   async deletePerson(req: Request, res: Response, next: NextFunction) {

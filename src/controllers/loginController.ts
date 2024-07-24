@@ -84,9 +84,9 @@ class LoginController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const insertedTokenOnBlacklist: boolean = await BlacklistTokenController.insertToken(token);
+      const insertTokenOnBlacklist: boolean = await BlacklistTokenController.insertToken(token);
 
-      if (!insertedTokenOnBlacklist) {
+      if (!insertTokenOnBlacklist) {
         const response: object = {
           error: true,
           message: "There was an error while logging out",
