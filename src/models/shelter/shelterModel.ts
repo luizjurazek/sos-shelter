@@ -1,7 +1,20 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../../config/connection";
+import ShelterAddress from "../shelter/shelterAddressModel";
+import { ShelterAttributes } from "../../types/shelterTypes";
 
-class Shelter extends Model {}
+interface ShelterCreationAttributes extends Optional<ShelterAttributes, "id"> {}
+
+class Shelter extends Model<ShelterAttributes, ShelterCreationAttributes> implements ShelterAttributes {
+  public id!: number;
+  public name!: string;
+  public address!: number;
+  public max_capacity!: number;
+  public current_occupancy!: number;
+  public amount_volunteers!: number;
+  public id_admin_shelter?: number | null;
+  public ShelterAddress?: ShelterAddress;
+}
 
 Shelter.init(
   {
@@ -54,5 +67,7 @@ Shelter.init(
     tableName: "shelters",
   },
 );
+
+Shelter.belongsTo(ShelterAddress, { foreignKey: "address", as: "ShelterAddress" });
 
 export default Shelter;

@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction } from "express";
+import { Op } from "sequelize";
+
+// import models
 import Shelter from "../models/shelter/shelterModel";
-import { Op, literal } from "sequelize";
 import PeopleModel from "../models/people/peopleModel";
+import ShelterAddress from "../models/shelter/shelterAddressModel";
+
+// Import utils
 import { shelterValidatorData } from "../utils/shelterValidatorData";
 import { CustomError } from "../types/errorTypes";
 import statusCode from "../utils/statusCode";
-
-const ShelterModel = Shelter;
+import { ShelterAttributes } from "../types/shelterTypes";
 
 class ShelterController {
   // method to create a shelter
@@ -32,7 +36,7 @@ class ShelterController {
         id_admin_shelter,
       }: { name: string; address: number; max_capacity: number; current_occupancy: number; amount_volunteers: number; id_admin_shelter: number | null } = req.body;
 
-      const shelterCreated = await ShelterModel.create({
+      const shelterCreated = await Shelter.create({
         name,
         address,
         max_capacity,
@@ -67,7 +71,7 @@ class ShelterController {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to get all Shelters'
     try {
-      const allShelters = await ShelterModel.findAll();
+      const allShelters = await Shelter.findAll();
 
       if (allShelters.length === 0) {
         const response: object = {
@@ -90,11 +94,41 @@ class ShelterController {
     }
   }
 
-  // // method to get shelters by city
-  // async getSheltersByCity(req: Request, res: Response, next: NextFunction) {
-  //   // #swagger.tags = ['Shelter']
-  //   // #swagger.description = 'Endpoint to get all shelters by city'
-  // }
+  // method to get shelters by city
+  async getSheltersByCity(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['Shelter']
+    // #swagger.description = 'Endpoint to get all shelters by city'
+    const cityName: string = req.params.city.toString();
+
+    const sheltersInCity: Array<Shelter> = await Shelter.findAll({
+      include: [
+        {
+          model: ShelterAddress,
+          as: "ShelterAddress",
+          where: { city: { [Op.like]: `${cityName}` } },
+        },
+      ],
+    });
+
+    if (sheltersInCity.length === 0) {
+      const response: object = {
+        error: true,
+        message: "Shelters not found",
+        city: cityName,
+      };
+
+      return res.status(statusCode.NOT_FOUND).json(response);
+    }
+
+    const response: object = {
+      error: false,
+      message: "Shelters found with successfull",
+      city: cityName,
+      sheltersInCity,
+    };
+
+    return res.status(statusCode.OK).json(response);
+  }
 
   // Method to edit a shelter
   async editShelter(req: Request, res: Response, next: NextFunction) {
@@ -129,7 +163,7 @@ class ShelterController {
         id_admin_shelter: number;
       } = req.body;
 
-      const shelter = await ShelterModel.findByPk(id);
+      const shelter = await Shelter.findByPk(id);
 
       // case shelter is not found in bd return and error
       if (shelter === null) {
@@ -142,7 +176,7 @@ class ShelterController {
         return res.status(statusCode.NOT_FOUND).json(response);
       }
 
-      const shelterUpdate = await ShelterModel.update({ name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter }, { where: { id }, returning: false });
+      const shelterUpdate = await Shelter.update({ name, address, max_capacity, current_occupancy, amount_volunteers, id_admin_shelter }, { where: { id }, returning: false });
 
       if (shelterUpdate[0] !== 1) {
         const response: object = {
@@ -195,10 +229,10 @@ class ShelterController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      const shelter = await ShelterModel.findByPk(id);
+      const shelter = await Shelter.findByPk(id);
       const shelterData = shelter?.dataValues;
 
-      const deletedShelter = await ShelterModel.destroy({
+      const deletedShelter = await Shelter.destroy({
         where: {
           id,
         },

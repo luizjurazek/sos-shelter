@@ -1,3 +1,4 @@
+import ShelterAddress from "../models/shelter/shelterAddressModel";
 interface ShelterAttributes {
   id: number;
   name: string;
@@ -6,6 +7,7 @@ interface ShelterAttributes {
   current_occupancy: number;
   amount_volunteers: number;
   id_admin_shelter?: number | null;
+  ShelterAddress?: ShelterAddress;
 }
 
 export { ShelterAttributes };
