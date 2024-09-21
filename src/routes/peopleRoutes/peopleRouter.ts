@@ -1,6 +1,6 @@
 import { Router } from "express";
-import errorHandle from "../middlewares/errorHandle";
-import controller from "../controllers/peopleController";
+import errorHandle from "../../middlewares/errorHandle";
+import controller from "../../controllers/people/peopleController";
 
 const router: Router = Router();
 const PeopleController = new controller();

@@ -1,11 +1,11 @@
-import People from "../models/people/peopleModel";
+import People from "../../models/people/peopleModel";
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../types/errorTypes";
-import peopleValidatorData from "../utils/peopleValidatorData";
-import statusCode from "../utils/statusCode";
-import Shelter from "../models/shelter/shelterModel";
-import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../utils/updateCurrentOccupancyOnShelter";
-import { checkVacancyOnShelter } from "../utils/checkVacancyOnshelter";
+import { CustomError } from "../../types/errorTypes";
+import peopleValidatorData from "../../utils/peopleValidatorData";
+import statusCode from "../../utils/statusCode";
+import Shelter from "../../models/shelter/shelterModel";
+import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../../utils/updateCurrentOccupancyOnShelter";
+import { checkVacancyOnShelter } from "../../utils/checkVacancyOnshelter";
 
 const ShelterModel = Shelter;
 const PeopleModel = People;

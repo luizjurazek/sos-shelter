@@ -2,15 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { Op } from "sequelize";
 
 // import models
-import Shelter from "../models/shelter/shelterModel";
-import PeopleModel from "../models/people/peopleModel";
-import ShelterAddress from "../models/shelter/shelterAddressModel";
+import Shelter from "../../models/shelter/shelterModel";
+import PeopleModel from "../../models/people/peopleModel";
+import ShelterAddress from "../../models/shelter/shelterAddressModel";
 
 // Import utils
-import { shelterValidatorData } from "../utils/shelterValidatorData";
-import { CustomError } from "../types/errorTypes";
-import statusCode from "../utils/statusCode";
-import { ShelterAttributes } from "../types/shelterTypes";
+import { shelterValidatorData } from "../../utils/shelterValidatorData";
+import { CustomError } from "../../types/errorTypes";
+import statusCode from "../../utils/statusCode";
 
 class ShelterController {
   // method to create a shelter
@@ -71,7 +70,14 @@ class ShelterController {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to get all Shelters'
     try {
-      const allShelters = await Shelter.findAll();
+      const allShelters = await Shelter.findAll({
+        include: [
+          {
+            model: ShelterAddress,
+            as: "ShelterAddress",
+          },
+        ],
+      });
 
       if (allShelters.length === 0) {
         const response: object = {

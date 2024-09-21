@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/user/userModel";
+import User from "../../models/user/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
 import BlacklistToken from "./blacklistTokenController";
-import statusCode from "../utils/statusCode";
+import statusCode from "../../utils/statusCode";
 dotenvConfig();
 
 const SECRET_JWT: jwt.Secret = process.env.SECRET_JWT || "Default_secret";
@@ -18,6 +18,9 @@ class LoginController {
     // #swagger.description = 'Endpoint to do login'
     try {
       const { email, password }: { email: string; password: string } = req.body;
+      console.log(req.body);
+      console.log(email);
+      console.log(password);
 
       const user = await UserModel.findOne({
         where: {

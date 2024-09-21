@@ -1,4 +1,4 @@
-import BlacklistToken from "../models/user/blacklistTokenModel";
+import BlacklistToken from "../../models/user/blacklistTokenModel";
 
 const BlacklistTokenModel = BlacklistToken;
 

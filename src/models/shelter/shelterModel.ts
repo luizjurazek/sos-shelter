@@ -2,6 +2,7 @@ import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../../config/connection";
 import ShelterAddress from "../shelter/shelterAddressModel";
 import { ShelterAttributes } from "../../types/shelterTypes";
+import User from "../user/userModel";
 
 interface ShelterCreationAttributes extends Optional<ShelterAttributes, "id"> {}
 
@@ -69,5 +70,6 @@ Shelter.init(
 );
 
 Shelter.belongsTo(ShelterAddress, { foreignKey: "address", as: "ShelterAddress" });
+Shelter.belongsTo(User, { foreignKey: "id_admin_shelter", as: "ShelterAdmin" });
 
 export default Shelter;

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/user/userModel";
+import User from "../../models/user/userModel";
 import bcrypt from "bcrypt";
-import statusCode from "../utils/statusCode";
-import { userValidatorData } from "../utils/userValidatorData";
-import { CustomError } from "../types/errorTypes";
+import statusCode from "../../utils/statusCode";
+import { userValidatorData } from "../../utils/userValidatorData";
+import { CustomError } from "../../types/errorTypes";
 
 const UserModel = User;
 

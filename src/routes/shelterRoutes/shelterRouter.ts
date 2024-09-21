@@ -1,6 +1,6 @@
 import { Router } from "express";
-import errorHandle from "../middlewares/errorHandle";
-import controller from "../controllers/shelterController";
+import errorHandle from "../../middlewares/errorHandle";
+import controller from "../../controllers/shelter/shelterController";
 
 const router: Router = Router();
 const ShelterController = new controller();
