@@ -1,15 +1,17 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import { Op } from "sequelize";
 
 // import models
 import Shelter from "../../models/shelter/shelterModel";
 import PeopleModel from "../../models/people/peopleModel";
 import ShelterAddress from "../../models/shelter/shelterAddressModel";
+import UserModel from "../../models/user/userModel";
 
 // Import utils
 import { shelterValidatorData } from "../../utils/shelterValidatorData";
 import { CustomError } from "../../types/errorTypes";
 import statusCode from "../../utils/statusCode";
+import { STATUS_CODES } from "http";
 
 class ShelterController {
   // method to create a shelter
@@ -92,6 +94,42 @@ class ShelterController {
         error: false,
         message: "Shelters found with successfully",
         shelters: allShelters,
+      };
+
+      return res.status(statusCode.OK).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getShelterById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id_shelter: number = parseInt(req.params.id);
+      const shelter = await Shelter.findByPk(id_shelter, {
+        include: [
+          {
+            model: ShelterAddress,
+            as: "ShelterAddress",
+          },
+        ],
+      });
+
+      console.log(shelter);
+      if (shelter === null) {
+        const response: object = {
+          error: true,
+          message: "Shelter not found",
+          id_shelter,
+        };
+
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Shelter found with successfull",
+        id_shelter,
+        shelter,
       };
 
       return res.status(statusCode.OK).json(response);
