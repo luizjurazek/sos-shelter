@@ -6,12 +6,12 @@ import Shelter from "../../models/shelter/shelterModel";
 import PeopleModel from "../../models/people/peopleModel";
 import ShelterAddress from "../../models/shelter/shelterAddressModel";
 import UserModel from "../../models/user/userModel";
+import SupplyModel from "../../models/shelter/supplyModel";
 
 // Import utils
 import { shelterValidatorData } from "../../utils/shelterValidatorData";
 import { CustomError } from "../../types/errorTypes";
 import statusCode from "../../utils/statusCode";
-import { STATUS_CODES } from "http";
 
 class ShelterController {
   // method to create a shelter
@@ -110,6 +110,10 @@ class ShelterController {
           {
             model: ShelterAddress,
             as: "ShelterAddress",
+          },
+          {
+            model: UserModel,
+            as: "ShelterAdmin",
           },
         ],
       });

@@ -42,6 +42,7 @@ const SupplyModel = sequelize.define(
 
 SupplyModel.belongsTo(ShelterModel, {
   foreignKey: "id_shelter",
+  as: "ShelterSupply",
 });
 
 export default SupplyModel;

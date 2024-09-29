@@ -158,7 +158,7 @@ class UserController {
         birthday,
         email,
         phonenumber,
-        password,
+        user_password,
         role,
         id_shelter,
       }: {
@@ -168,7 +168,7 @@ class UserController {
         birthday: Date;
         email: string;
         phonenumber: string;
-        password: string;
+        user_password: string;
         role: number;
         id_shelter: number;
       } = req.body;
@@ -183,14 +183,24 @@ class UserController {
         throw error;
       }
 
-      const user = await UserModel.findOne({ where: { id } });
+      const user = await UserModel.findByPk(id);
+      console.log(user);
 
       const salt = bcrypt.genSaltSync(10);
-      const passwordHashed = await bcrypt.hash(password, salt);
+      const password = await bcrypt.hash(user_password, salt);
+
+      if (user === null) {
+        const response: object = {
+          error: true,
+          message: "User not found",
+        };
+
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
 
       if (user != null) {
         await UserModel.update(
-          { name, lastname, birthday, email, phonenumber, passwordHashed, role, id_shelter },
+          { name, lastname, birthday, email, phonenumber, password, role, id_shelter },
           {
             where: { id },
             returning: true,
@@ -209,6 +219,7 @@ class UserController {
             phonenumber,
             password,
             role,
+            id_shelter,
           },
         };
 

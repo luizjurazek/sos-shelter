@@ -1,7 +1,35 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Optional } from "sequelize";
 import { sequelize } from "../../config/connection";
 
-class User extends Model {}
+import Shelter from "../shelter/shelterModel";
+
+// Interface para os atributos do User
+interface UserAttributes {
+  id: number;
+  name: string;
+  lastname: string;
+  birthday: Date;
+  email: string;
+  phonenumber: string;
+  password: string;
+  role: number;
+  id_shelter?: number | null; // Tornar opcional já que pode ser null
+}
+
+interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: number;
+  public name!: string;
+  public lastname!: string;
+  public birthday!: Date;
+  public email!: string;
+  public phonenumber!: string;
+  public password!: string;
+  public role!: number;
+  public id_shelter?: number | null;
+}
+
+// class User extends Model {}
 
 User.init(
   {
