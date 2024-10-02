@@ -34,13 +34,13 @@ async function userValidatorData(data: UserAttributes) {
     errors.push("phonenumber need to have the following pattern: (xx)xxxxx-xxxx");
   }
 
-  if (!data.role || typeof data.role !== "number") {
-    errors.push("role must be filled and a number");
-  }
+  // if (!data.role || typeof data.role !== "number") {
+  //   errors.push("role must be filled and a number");
+  // }
 
-  if (!data.id_shelter || typeof data.id_shelter !== "number") {
-    errors.push("id_shelter must be filled and a number");
-  }
+  // if (!data.id_shelter || typeof data.id_shelter !== "number") {
+  //   errors.push("id_shelter must be filled and a number");
+  // }
 
   if (errors.length > 0) {
     return errors;

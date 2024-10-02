@@ -12,7 +12,7 @@ interface UserAttributes {
   email: string;
   phonenumber: string;
   password: string;
-  role: number;
+  role?: number | null;
   id_shelter?: number | null; // Tornar opcional já que pode ser null
 }
 
@@ -25,7 +25,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public phonenumber!: string;
   public password!: string;
-  public role!: number;
+  public role?: number | null;
   public id_shelter?: number | null;
 }
 
@@ -65,7 +65,7 @@ User.init(
     },
     role: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "UserRole",
         key: "id",

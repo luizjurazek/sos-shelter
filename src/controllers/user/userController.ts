@@ -99,7 +99,15 @@ class UserController {
         phonenumber,
         role,
         id_shelter,
-      }: { name: string; lastname: string; birthday: Date; email: string; phonenumber: string; role: number; id_shelter: number } = req.body;
+      }: {
+        name: string;
+        lastname: string;
+        birthday: Date;
+        email: string;
+        phonenumber: string;
+        role: number | null;
+        id_shelter: number | null;
+      } = req.body;
 
       // Check if data is following the rules
       const validateData: Array<string> | boolean = await userValidatorData(req.body);
@@ -108,6 +116,14 @@ class UserController {
         const error: CustomError = new Error("Has erros while create a person");
         error.statusCode = statusCode.BAD_REQUEST;
         error.errors = validateData;
+        throw error;
+      }
+
+      const checkIfEmailAlreadyExists = await UserModel.findAll({ where: { email } });
+      if (checkIfEmailAlreadyExists.length > 1) {
+        const error: CustomError = new Error("Email already in use.");
+        error.statusCode = statusCode.BAD_REQUEST;
+        error.errors = ["Email already in use."];
         throw error;
       }
 

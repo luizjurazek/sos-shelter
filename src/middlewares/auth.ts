@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config as dotenvConfig } from "dotenv";
 import { Request, Response, NextFunction, response } from "express";
-import BlacklistToken from "../controllers/blacklistTokenController";
+import BlacklistToken from "../controllers/user/blacklistTokenController";
 import statusCode from "../utils/statusCode";
 dotenvConfig();
 

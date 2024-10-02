@@ -1,6 +1,7 @@
 import { Router } from "express";
 import errorHandle from "../../middlewares/errorHandle";
 import controller from "../../controllers/shelter/shelterController";
+import verfifyJWT from "../../middlewares/auth";
 
 const router: Router = Router();
 const ShelterController = new controller();
