@@ -29,7 +29,7 @@ async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction)
       error: true,
       message: "Unauthorized user, do login again",
     };
-    return res.status(statusCode.INTERNAL_SERVER_ERROR).json(response);
+    return res.status(statusCode.UNAUTHORIZED).json(response);
   }
 
   jwt.verify(TOKEN, SECRET_JWT, function (error, decoded) {
@@ -38,7 +38,7 @@ async function verfifyJWT(req: CustomRequest, res: Response, next: NextFunction)
         error: true,
         messsage: "Failed to authenticate token",
       };
-      return res.status(statusCode.INTERNAL_SERVER_ERROR).json(response);
+      return res.status(statusCode.UNAUTHORIZED).json(response);
     }
 
     const decodedPayload = decoded as JwtPayload;
