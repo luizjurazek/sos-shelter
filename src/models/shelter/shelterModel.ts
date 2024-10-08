@@ -9,7 +9,7 @@ interface ShelterCreationAttributes extends Optional<ShelterAttributes, "id"> {}
 class Shelter extends Model<ShelterAttributes, ShelterCreationAttributes> implements ShelterAttributes {
   public id!: number;
   public name!: string;
-  public address!: number;
+  public address?: number | null;
   public max_capacity!: number;
   public current_occupancy!: number;
   public amount_volunteers!: number;
@@ -31,7 +31,7 @@ Shelter.init(
     },
     address: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "ShelterAddress",
         key: "id",

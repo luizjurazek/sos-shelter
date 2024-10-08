@@ -13,9 +13,9 @@ async function shelterValidatorData(data: ShelterAttributes) {
     errors.push("Name must be filled and a string");
   }
 
-  if (data.address === undefined || typeof data.address !== "number") {
-    errors.push("address must be filled and an number");
-  }
+  // if (data.address === undefined || typeof data.address !== "number") {
+  //   errors.push("address must be filled and an number");
+  // }
 
   if (data.max_capacity === undefined || typeof data.max_capacity !== "number") {
     errors.push("max_capacity must be filled and a number");

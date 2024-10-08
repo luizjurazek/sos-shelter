@@ -2,7 +2,7 @@ import ShelterAddress from "../models/shelter/shelterAddressModel";
 interface ShelterAttributes {
   id: number;
   name: string;
-  address: number;
+  address?: number | null;
   max_capacity: number;
   current_occupancy: number;
   amount_volunteers: number;
