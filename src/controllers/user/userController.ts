@@ -86,6 +86,40 @@ class UserController {
     }
   }
 
+  // method to get all user that is admin and isn't on shelter
+  async getUserIsAdminAndFree(req: Request, res: Response, next: NextFunction) {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'get all user that is admin and isn't on shelter'
+
+    try {
+      const users = await UserModel.findAll({
+        where: {
+          role: 1,
+          id_shelter: null,
+        },
+      });
+
+      if (users === null) {
+        const response: object = {
+          error: true,
+          message: "User that are admin and isn't on shelter not found",
+        };
+
+        return res.status(statusCode.NOT_FOUND).json(response);
+      }
+
+      const response: object = {
+        error: false,
+        message: "Admin free found with successfully",
+        users,
+      };
+
+      return res.status(statusCode.OK).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   // method to create a new user
   async createUser(req: Request, res: Response, next: NextFunction) {
     // #swagger.tags = ['User']
