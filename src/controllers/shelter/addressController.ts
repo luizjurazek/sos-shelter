@@ -47,7 +47,13 @@ export default class AddressController {
         return res.status(statusCode.BAD_REQUEST).json(response);
       }
 
-      return res.status(statusCode.OK).json(address);
+      const response: object = {
+        error: false,
+        messsage: "Address created with successfully",
+        address,
+      };
+
+      return res.status(statusCode.OK).json(response);
     } catch (error) {
       next(error);
     }

@@ -6,7 +6,6 @@ import Shelter from "../../models/shelter/shelterModel";
 import PeopleModel from "../../models/people/peopleModel";
 import ShelterAddress from "../../models/shelter/shelterAddressModel";
 import UserModel from "../../models/user/userModel";
-import SupplyModel from "../../models/shelter/supplyModel";
 
 // Import utils
 import { shelterValidatorData } from "../../utils/shelterValidatorData";
@@ -19,15 +18,6 @@ class ShelterController {
     // #swagger.tags = ['Shelter']
     // #swagger.description = 'Endpoint to create a shelter'
     try {
-      // Case data isnt validated throw an error
-      const validateData: Array<string> | boolean = await shelterValidatorData(req.body);
-      if (validateData !== true) {
-        const error: CustomError = new Error("Has errors on data ");
-        error.statusCode = statusCode.BAD_REQUEST;
-        error.errors = validateData;
-        throw error;
-      }
-
       const {
         name,
         address,

@@ -24,7 +24,7 @@ ShelterAddress.init(
       allowNull: false,
     },
     street: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: null,
     },
