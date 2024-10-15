@@ -12,7 +12,7 @@ export default class SupplyController {
     // #swagger.description = 'Endpoint to create a shelter'
 
     try {
-      const id_shelter: number = req.body.id;
+      const id_shelter: number = parseInt(req.params.id);
       const shelterExist = await Shelter.findByPk(id_shelter);
 
       if (shelterExist === null) {
@@ -32,7 +32,7 @@ export default class SupplyController {
       });
 
       if (data.length === 0) {
-        const response: object = {
+        const response = {
           error: true,
           message: "Supplies not found.",
         };
@@ -40,7 +40,7 @@ export default class SupplyController {
         return res.status(statusCode.NOT_FOUND).json(response);
       }
 
-      const response: object = {
+      const response = {
         error: false,
         message: "Supplies found with successfully.",
         supplies: data,

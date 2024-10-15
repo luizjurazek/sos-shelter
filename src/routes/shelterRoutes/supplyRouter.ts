@@ -6,7 +6,7 @@ import verfifyJWT from "../../middlewares/auth";
 const router: Router = Router();
 const SupplyController = new controller();
 
-router.get("/get-supply-by-shelter-id", SupplyController.getSupplyByShelter);
+router.get("/get-supply-by-shelter-id/:id", SupplyController.getSupplyByShelter);
 
 router.use(errorHandle);
 
