@@ -1,9 +1,14 @@
-import People from "../../models/people/peopleModel";
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../../types/errorTypes";
 import peopleValidatorData from "../../utils/peopleValidatorData";
 import statusCode from "../../utils/statusCode";
+
+import People from "../../models/people/peopleModel";
 import Shelter from "../../models/shelter/shelterModel";
+import PeopleNewAddress from "../../models/people/peopleNewAddressModel";
+import PeopleOldAddress from "../../models/people/peopleOldAddressModel";
+import PeopleStatus from "../../models/people/peopleStatusModel";
+
 import { updateCurrentOccupancyOnShelter, updateCurrentOccupancyOnAllShelter } from "../../utils/updateCurrentOccupancyOnShelter";
 import { checkVacancyOnShelter } from "../../utils/checkVacancyOnshelter";
 
@@ -16,7 +21,22 @@ class PeopleController {
     // #swagger.tags = ['People']
     // #swagger.description = 'Endpoint to get all people'
     try {
-      const people: People[] = await PeopleModel.findAll();
+      const people: People[] = await PeopleModel.findAll({
+        include: [
+          {
+            model: PeopleNewAddress,
+            as: "PeopleNewAddress",
+          },
+          {
+            model: PeopleOldAddress,
+            as: "PeopleOldAddress",
+          },
+          {
+            model: PeopleStatus,
+            as: "PeopleStatus",
+          },
+        ],
+      });
 
       if (people.length === 0) {
         const response: object = {
@@ -160,6 +180,20 @@ class PeopleController {
         where: {
           id_shelter,
         },
+        include: [
+          {
+            model: PeopleNewAddress,
+            as: "PeopleNewAddress",
+          },
+          {
+            model: PeopleOldAddress,
+            as: "PeopleOldAddress",
+          },
+          {
+            model: PeopleStatus,
+            as: "PeopleStatus",
+          },
+        ],
       });
 
       if (peopleOnShelter.length === 0) {
